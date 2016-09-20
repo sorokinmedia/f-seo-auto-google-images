@@ -146,7 +146,7 @@ a.img_btn span{
     width: 30%;
     float: left;
 }
-.agi_img_add{
+.agi_img_add,.agi_add_all_marked{
     display: block;
     background: #00a0d2;
     border-color: #0073aa;
@@ -167,6 +167,10 @@ a.img_btn span{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+.agi_add_all_marked{
+    float: none;
+    width: 200px;
 }
 .agi_img_mark{
     position: absolute;

@@ -84,6 +84,8 @@ function addHtml() {
             +'<option value="alignleft">Слева</option>'
             +'<option value="alignright">Справа</option>'
         +'</select>'
+        
+        +'<sapn class="agi_add_all_marked">Добавить выделенные</sapn>'
     );
 }
 
@@ -196,7 +198,16 @@ function googleImagesSearch() {
         jQuery('.agi_img_add').click(function () {
             var rem = jQuery(this).parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            googleImagesUpload(rem.find('.agi_img_res'));  
+            googleImagesUpload(rem.find('.agi_img_res'));
+        });
+        
+        jQuery('.agi_add_all_marked').click(function () {
+
+            jQuery('[mark = "marked"]').each(function (index,elem) {
+                var rem = jQuery(this);
+                rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
+                googleImagesUpload(rem.find('.agi_img_res')); 
+            });
         });
 
         searchXhr = null;
@@ -217,7 +228,7 @@ function googleImagesUpload(item) {
 
     $.post(ajaxurl, data2, function(response){
         var pathname = jQuery(location).attr('host');
-        alert('Добавлено! ' + response);
+        //alert('Добавлено! ' + response);
         item.find('.load_img').text('Добавлено');
         getCaretPos(carPos,'<img src="' + 'http://' + pathname + response + '" class="' + jQuery('.img_side_float').val()
             + '" width="' + jQuery('.img_width_sel').val() + '"/>');  
@@ -233,7 +244,7 @@ function getCaretPos(p,value) {
         text = ta.val();
     if(p != undefined) {
         ta.val(text.slice(0, p) + value + text.slice(p));
-        alert("Вставил");
+        //alert("Вставил");
     }
     else{
         ta.trigger('focus');
