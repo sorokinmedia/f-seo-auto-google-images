@@ -1,6 +1,9 @@
 /**
  * Created by F-SEO on 14.09.2016.
  */
+
+var carPos;
+
 function addHtml() {
     jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertBefore('#insert-media-button');
     jQuery('.wp-admin').append('<div class="agi_popup"></div>>');
@@ -65,6 +68,22 @@ function addHtml() {
             +'<option value="white">Белые</option>'
             +'<option value="yellow">Желтые</option>'
         +'</select>'
+
+        +'<div class="imgs_onsite">Отображение на сайте (применяется при добавлении)</div>'
+
+        +'<div>Ширина</div>'
+
+        +'<select class="img_width_sel">'
+            +'<option value="300">300</option>'
+            +'<option value="400">400</option>'
+            +'<option value="600">600</option>'
+        +'</select>'
+
+        +'<select class="img_side_float">'
+            +'<option value="aligncenter">По центру</option>'
+            +'<option value="alignleft">Слева</option>'
+            +'<option value="alignright">Справа</option>'
+        +'</select>'
     );
 }
 
@@ -75,9 +94,12 @@ jQuery(document).ready(function() {
     // Обработаем клик
     jQuery('.img_btn').click(function () {
 
+        if(!carPos) carPos = 0;
+
         //вывести окно
         jQuery('.agi_popup').toggle();
         jQuery('.agi_window').toggle();
+
     });
     //сделать запрос Гуглу
     // распарсить ответ
@@ -94,6 +116,10 @@ jQuery(document).ready(function() {
         googleImagesSearch();
     });
 
+
+    jQuery('#content').focusout(function () {
+        carPos = jQuery(this)[0].selectionStart;
+    });
 
 });
 
@@ -168,47 +194,52 @@ function googleImagesSearch() {
         });
 
         jQuery('.agi_img_add').click(function () {
-            googleImagesUpload();
+            var rem = jQuery(this).parent();
+            rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
+            googleImagesUpload(rem.find('.agi_img_res'));  
         });
 
         searchXhr = null;
+
     }, "json");
 }
 
-function googleImagesUpload() {
+function googleImagesUpload(item) {
     var $ = jQuery;
-
-    //if (!$("#google-images-footer .results .google-image:first").length) return;
-
-    var item = jQuery('.agi_img_res');
-    //item.find('.loader').show();
 
     var data2 = {
         'action': 'google_images_upload',
         'url': item.attr('url'),
         'referer': item.attr('referer'),
-        'post_id': '2088',
+        'post_id': googleImagesPostId,
         'search': item.attr('q')
     };
-    alert('Добавлztncz');
+
     $.post(ajaxurl, data2, function(response){
+        var pathname = jQuery(location).attr('host');
+        alert('Добавлено! ' + response);
+        item.find('.load_img').text('Добавлено');
+        getCaretPos(carPos,'<img src="' + 'http://' + pathname + response + '" class="' + jQuery('.img_side_float').val()
+            + '" width="' + jQuery('.img_width_sel').val() + '"/>');  
 
-        alert('Ответ ' + response);
-        var rem = item.parent();
-        rem.remove();
-
-        /*if (!$("#google-images-footer .results .google-image:first").length)
-        {
-            $(".media-menu-item").eq(0).click();
-            $(".media-router .media-menu-item").eq(1).click();
-            $("#media-attachment-filters").val("uploaded").change();
-//            wp.media.editor.get(wpActiveEditor).views._views[".media-frame-content"][0].views._views[""][3].collection.props.set({ignore:(+(new Date()))});
-        }
-        else
-        {
-            googleImagesUpload();
-        }*/
     });
+
+}
+
+function getCaretPos(p,value) {
+    var $ = jQuery;
+    var ta = $('#content');
+        //p = ta[0].selectionStart;
+        text = ta.val();
+    if(p != undefined) {
+        ta.val(text.slice(0, p) + value + text.slice(p));
+        alert("Вставил");
+    }
+    else{
+        ta.trigger('focus');
+        range = document.selection.createRange(); 
+        range.text = value;
+    }
 }
 
 

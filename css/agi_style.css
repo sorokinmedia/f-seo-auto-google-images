@@ -37,6 +37,16 @@
     box-sizing: border-box;
     overflow: hidden;
 }
+.agi_preview:before{
+    content: '';
+    background: url(/wp-content/plugins/f-seo-auto-google-images/img/x.png) 0 0 no-repeat;
+    width: 25px;
+    height: 29px;
+    display: inline-block;
+    position: absolute;
+    left: 96%;
+    top: 10%;
+}
 .agi_preview img{
     display: block;
     margin: auto;
@@ -170,4 +180,13 @@ a.img_btn span{
 }
 .founded_img:hover .agi_img_mark{
     display: block;
+}
+.imgs_onsite{
+    margin-bottom: 10px;
+    margin-top: 20px;
+    display: block;
+}
+.load_img{
+    color: #000000;
+    text-decoration: none;
 }

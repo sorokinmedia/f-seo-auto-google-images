@@ -9,7 +9,7 @@ Author URI: http://f-seo.ru/
 
 define ( 'FSEO_AGI_CURRENT_VERSION',  '1.0' );
 
-include(dirname(__FILE__).'/GoogleImage.php'); 
+include(dirname(__FILE__).'/GoogleImage.php');
 
 
 // Подключаем JS скрипт
@@ -150,10 +150,12 @@ function google_images_upload()
     }
     if ($image->mime=='image/png')
     {
-        $filename = $this->_getFileName($search).date("_dHis").".png";
+        $filename = _getFileName($search).date("_dHis").".png";
     } else {
-        $filename = $this->_getFileName($search).date("_dHis").".jpg";
+        $filename = _getFileName($search).date("_dHis").".jpg";
     }
+
+    //echo 123;//$image->mime . '   ' . $image->filename . '    ' . $image->files . '    ' . $image->width;
 
     $upload_dir = wp_upload_dir();
 
@@ -167,15 +169,73 @@ function google_images_upload()
         'post_content' => '',
         'post_status' => 'inherit',
     );
+
+    $file_dir = $upload_dir['path']."/".$filename;
+
     $attachment_id = wp_insert_attachment( $attachment, $image_url, $post_id );
     if( !function_exists( 'wp_generate_attachment_data' ) )
         require_once(ABSPATH . "wp-admin" . '/includes/image.php');
     $attach_data = wp_generate_attachment_metadata( $attachment_id, $upload_dir['path']."/".$filename );
-    echo $attach_data;
     wp_update_attachment_metadata( $attachment_id, $attach_data );
     update_attached_file( $attachment_id, $upload_dir['path']."/".$filename);
 
+    $pos = strpos($file_dir,'/wp-content');
+    $file_dir = substr($file_dir, $pos); 
+    $file_dir = str_replace('/public_html','',$file_dir );
+    echo $file_dir;
+
     die();
 }
-add_action('wp_ajax_google_images_upload', 'google_images_upload' ); 
+add_action('wp_ajax_google_images_upload', 'google_images_upload' );
+
+function _getFileName($search)
+{
+    $converter = array(
+        'а' => 'a',   'б' => 'b',   'в' => 'v',
+        'г' => 'g',   'д' => 'd',   'е' => 'e',
+        'ё' => 'e',   'ж' => 'zh',  'з' => 'z',
+        'и' => 'i',   'й' => 'y',   'к' => 'k',
+        'л' => 'l',   'м' => 'm',   'н' => 'n',
+        'о' => 'o',   'п' => 'p',   'р' => 'r',
+        'с' => 's',   'т' => 't',   'у' => 'u',
+        'ф' => 'f',   'х' => 'h',   'ц' => 'c',
+        'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
+        'ь' => '',    'ы' => 'y',   'ъ' => '',
+        'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+
+        'А' => 'A',   'Б' => 'B',   'В' => 'V',
+        'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
+        'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
+        'И' => 'I',   'Й' => 'Y',   'К' => 'K',
+        'Л' => 'L',   'М' => 'M',   'Н' => 'N',
+        'О' => 'O',   'П' => 'P',   'Р' => 'R',
+        'С' => 'S',   'Т' => 'T',   'У' => 'U',
+        'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
+        'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
+        'Ь' => '',    'Ы' => 'Y',   'Ъ' => '',
+        'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
+        '.' => "_",   ' ' => "_",   ',' => '_',
+        '?' => "_",   '!' => "_",   "'" => '',
+    );
+    $search = strtr(trim($search), $converter);
+    $upload_dir = wp_upload_dir();
+
+    $number = 0;
+    if ($handle = opendir($upload_dir['path']))
+    {
+        while (false !== ($entry = readdir($handle)))
+        {
+            if ($entry == "." || $entry == "..") continue;
+
+            if (strpos($entry."_", $search, 0) === 0)
+            {
+                $num = (int) substr($entry, strlen($search) + 1);
+                if ($num > $number) $number = $num;
+            }
+        }
+
+        closedir($handle);
+    }
+    return $search."_".($number+1);
+}
 
