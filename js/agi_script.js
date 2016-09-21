@@ -3,6 +3,7 @@
  */
 
 var carPos;
+var alt;
 
 function addHtml() {
     jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertBefore('#insert-media-button');
@@ -101,6 +102,7 @@ jQuery(document).ready(function() {
         //вывести окно
         jQuery('.agi_popup').toggle();
         jQuery('.agi_window').toggle();
+        alt = getNearestTitle(carPos);
 
     });
     //сделать запрос Гуглу
@@ -203,10 +205,12 @@ function googleImagesSearch() {
         
         jQuery('.agi_add_all_marked').click(function () {
 
+            var originAlt = alt;
             jQuery('[mark = "marked"]').each(function (index,elem) {
                 var rem = jQuery(this);
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                googleImagesUpload(rem.find('.agi_img_res')); 
+                //alert(index);
+                googleImagesUpload(rem.find('.agi_img_res'),originAlt + index);
             });
         });
 
@@ -215,8 +219,11 @@ function googleImagesSearch() {
     }, "json");
 }
 
-function googleImagesUpload(item) {
+function googleImagesUpload(item,altI) {
     var $ = jQuery;
+
+    if(altI) var curAlt = altI;
+    else var curAlt = alt;
 
     var data2 = {
         'action': 'google_images_upload',
@@ -230,14 +237,14 @@ function googleImagesUpload(item) {
         var pathname = jQuery(location).attr('host');
         //alert('Добавлено! ' + response);
         item.find('.load_img').text('Добавлено');
-        getCaretPos(carPos,'<img src="' + 'http://' + pathname + response + '" class="' + jQuery('.img_side_float').val()
-            + '" width="' + jQuery('.img_width_sel').val() + '"/>');  
-
+        InsertByCaretPos(carPos,'<img src="' + 'http://' + pathname + response + '" class="' + jQuery('.img_side_float').val()
+            + '" width="' + jQuery('.img_width_sel').val() + '" alt="' + curAlt + '"/>'
+        );
     });
 
 }
 
-function getCaretPos(p,value) {
+function InsertByCaretPos(p,value) {
     var $ = jQuery;
     var ta = $('#content');
         //p = ta[0].selectionStart;
@@ -251,6 +258,25 @@ function getCaretPos(p,value) {
         range = document.selection.createRange(); 
         range.text = value;
     }
+}
+
+function getNearestTitle(pos) {
+    var $ = jQuery;
+    var str = $('#content').val();
+    var parsText = str.slice(0,pos);
+    var regexp = /<h2>/gi;
+    var res;var i;
+    while( res = regexp.exec(parsText) ){
+        i = res.index;
+    }
+    if( !i ) return null;
+    i = i + 4;
+    var alt = '';
+    while( parsText.charAt(i)!='<' ){
+        alt = alt + parsText.charAt(i);
+        i++;
+    }
+    return alt;
 }
 
 
