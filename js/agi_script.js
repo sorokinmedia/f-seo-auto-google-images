@@ -16,7 +16,7 @@ function addHtml() {
         '<a class="srch_btn">Find</a>' +
         '</div></div>');
 
-    jQuery('.agi_window').append('<div class="agi_results"></div>');
+    jQuery('.agi_window').append('<div class="agi_results"></div><span class="popap_cross"></span>'); 
     jQuery('.afi_win_left').append('<div class="agi_param"></div>');
 
     jQuery('.agi_param').append(
@@ -69,24 +69,6 @@ function addHtml() {
             +'<option value="white">Белые</option>'
             +'<option value="yellow">Желтые</option>'
         +'</select>'
-
-        +'<div class="imgs_onsite">Отображение на сайте (применяется при добавлении)</div>'
-
-        +'<div>Ширина</div>'
-
-        +'<select class="img_width_sel">'
-            +'<option value="300">300</option>'
-            +'<option value="400">400</option>'
-            +'<option value="600">600</option>'
-        +'</select>'
-
-        +'<select class="img_side_float">'
-            +'<option value="aligncenter">По центру</option>'
-            +'<option value="alignleft">Слева</option>'
-            +'<option value="alignright">Справа</option>'
-        +'</select>'
-        
-        +'<sapn class="agi_add_all_marked">Добавить выделенные</sapn>'
     );
 }
 
@@ -164,7 +146,14 @@ function googleImagesSearch() {
             var html = '<div class="founded_img" mark=""><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
                 + '" url="' + items[i].imgurl + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
-                + '</span><span class="agi_img_add">Add</span><span class="agi_img_mark">Mark</span></div>';
+                + '</span>'
+                + '<div><span class="agi_img_add 300_l_close"><300</span>'
+                + '<span class="agi_img_add 300_r_close">300></span>'
+                + '<span class="agi_img_add 300_l"><+300</span>'
+                + '<span class="agi_img_add 300_r">+300></span>'
+                + '<span class="agi_img_add 600">600</span>'
+                + '<span class="agi_img_add 600_close">+600</span></div>'
+                +'</div>';
             
             jQuery('.agi_results').append(html);
         }
