@@ -217,3 +217,12 @@ a.img_btn span{
 .agi_img_res{
     text-decoration: none;
 }
+.pages{
+    color: #0073aa;
+    cursor: pointer;
+    display: inline-block;
+    width: 50%;
+    font-size: 25px;
+    float: left;
+    margin-top: 20px;
+}
