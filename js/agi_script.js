@@ -3,6 +3,8 @@
  */
 var carPos;
 var alt;
+var agi_width_big;
+var agi_width;
 
 function addHtml() {
     jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertBefore('#insert-media-button');
@@ -15,8 +17,13 @@ function addHtml() {
         '<a class="srch_btn">Find</a>' +
         '</div></div>');
 
-    jQuery('.agi_window').append('<div class="agi_results"></div><span class="popap_cross"></span>');
+    jQuery('.agi_window').append('<div class="agi_results"></div><span class="popap_cross"></span><span class="btns_instruct"></span>');
     jQuery('.afi_win_left').append('<div class="agi_param"></div>');
+
+    jQuery('.btns_instruct').append('"+"  -  добавить картинку и сотаться на странице попап (если нажать на кнопку без плюса, окно закоется)' +
+        '/n"<"  -  доабвит картинку слева' +
+        '/n">"  -  доабвит картинку справа' +
+        '/n300, 600 или другое число   -   ширина картинки на сайте');
 
     jQuery('.agi_param').append(
         '<select class="agi_select_size">'
@@ -94,7 +101,7 @@ jQuery(document).ready(function() {
     // распарсить ответ
     //вывести ответ
 
-    // Скрытие окна
+    // Скрытие окна и показ окна
     jQuery('.agi_popup').click(function () {
         jQuery('.agi_popup').toggle();
         jQuery('.agi_window').toggle();
@@ -104,6 +111,7 @@ jQuery(document).ready(function() {
         jQuery('.agi_window').toggle();
     });
 
+    // Поиск
     jQuery('a.srch_btn').click(function () {
         googleImagesPage = 0;
         googleImagesSearch();
@@ -117,11 +125,12 @@ jQuery(document).ready(function() {
         googleImagesSearch();
     });
 
-
+    // Мониторим положение курсора в редакторе
     jQuery('#content').focusout(function () {
         carPos = jQuery(this)[0].selectionStart;
     });
 
+    // Горячие клавиши для показа окна
     document.onkeydown = function(e){
         e = e || window.event;
         if(e.ctrlKey && e.keyCode == 73){ //ctrl+a
@@ -132,8 +141,24 @@ jQuery(document).ready(function() {
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         }
+        if(e.keyCode == 27){
+            if(window.getSelection){
+                var selection = window.getSelection();
+                selection.removeAllRanges();
+            }
+            jQuery('.agi_popup').hide();
+            jQuery('.agi_window').hide();
+        }
+        if(e.keyCode == 13 && jQuery('.agi_srch_txt').is( ":focus" )){
+            if(window.getSelection){
+                var selection = window.getSelection();
+                selection.removeAllRanges();
+            }
+            jQuery('a.srch_btn').trigger('click');
+        }
     }
 
+    // Ф-я чтения выделенного
     function ShowSelection()
     {
         var textComponent = document.getElementById('content');
@@ -154,6 +179,15 @@ jQuery(document).ready(function() {
         }
         return selectedText;
     }
+
+    // Задаем ширину из настроек
+    setOptionWidth();
+
+
+
+    /*jQuery(function () {
+        //jQuery('[data-toggle="tooltip"]').tooltip();
+    })*/
 
 });
 
@@ -186,7 +220,7 @@ function googleImagesSearch() {
             return;
         }
         jQuery('.agi_results').html('');
-        
+
         for(var i = 0; i<items.length;i++){
             
             var srcFull = ajaxurl + "?action=google_images_get&full=true&url=" + items[i].imgurl + "&referer=" + items[i].imgrefurl;
@@ -195,17 +229,23 @@ function googleImagesSearch() {
                 + '" url="' + items[i].imgurl + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
-                + '<div><span class="agi_img_add l_300_close"><300</span>'
-                + '<span class="agi_img_add r_300_close">300></span>'
-                + '<span class="agi_img_add l_300"><+300</span>'
-                + '<span class="agi_img_add r_300">+300></span>'
-                + '<span class="agi_img_add add_600">+600</span>'
-                + '<span class="agi_img_add close_600">600</span></div>'
-                +'</div>';
+                + '<div><span class="agi_img_add l_300_close" data-toggle="tooltip" title="Добавить слева (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">←'
+                    +agi_width+'</span>'
+                + '<span class="agi_img_add r_300_close" data-toggle="tooltip" title="Добавить справа (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">'
+                    +agi_width+'→</span>'
+                + '<span class="agi_img_add close_600" data-toggle="tooltip" title="Добавить в центр (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">'
+                    +agi_width_big+'</span>'
+                + '<span class="agi_img_add l_300" data-toggle="tooltip" title="Добавить слева (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">←'
+                    +agi_width+'+</span>'
+                + '<span class="agi_img_add r_300" data-toggle="tooltip" title="Добавить справа (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">→'
+                    +agi_width+'+</span>'
+                + '<span class="agi_img_add add_600" data-toggle="tooltip" title="Добавить в центр (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">+'
+                    +agi_width_big+'</span>'
+                +'</div></div>';
             
             jQuery('.agi_results').append(html);
         }
-        
+
         jQuery('.agi_img_res').click(function () {
             
             var img = jQuery(this).attr('url');
@@ -224,7 +264,7 @@ function googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            googleImagesUpload(rem.find('.agi_img_res'),left,300);
+            googleImagesUpload(rem.find('.agi_img_res'),left,agi_width);
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -232,7 +272,7 @@ function googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            googleImagesUpload(rem.find('.agi_img_res'),right,300);
+            googleImagesUpload(rem.find('.agi_img_res'),right,agi_width);
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -240,25 +280,25 @@ function googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            googleImagesUpload(rem.find('.agi_img_res'),left,300);
+            googleImagesUpload(rem.find('.agi_img_res'),left,agi_width);
         });
         jQuery('.r_300').click(function () {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            googleImagesUpload(rem.find('.agi_img_res'),right,300);
+            googleImagesUpload(rem.find('.agi_img_res'),right,agi_width);
         });
         jQuery('.add_600').click(function () {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            googleImagesUpload(rem.find('.agi_img_res'),cen,600);
+            googleImagesUpload(rem.find('.agi_img_res'),cen,agi_width_big);
         });
         jQuery('.close_600').click(function () {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            googleImagesUpload(rem.find('.agi_img_res'),cen,600);
+            googleImagesUpload(rem.find('.agi_img_res'),cen,agi_width_big);
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -285,9 +325,10 @@ function googleImagesUpload(item,side,width,altI) {
         var pathname = jQuery(location).attr('host');
         //alert('Добавлено! ' + response);
         item.find('.load_img').text('Добавлено');
-        InsertByCaretPos(carPos,'<img src="' + 'http://' + pathname + response + '" class="' + side
-            + '" width="' + width + '" alt="' + curAlt + '"/>'
-        );
+        var img = '<img src="' + 'http://' + pathname + response + '" class="' + side
+            + '" width="' + width + '" alt="' + curAlt + '"/>';
+        InsertByCaretPos(carPos,img);
+        carPos = carPos+img.length;
     });
 
 }
@@ -313,20 +354,45 @@ function getNearestTitle(pos) {
     var str = $('#content').val();
     var parsText = str.slice(0,pos);
     var regexp = /<h2>/gi;
-    var res;var i;
+    var res; var i=-1;
     while( res = regexp.exec(parsText) ){
         i = res.index;
+        alert(i + ' в альте');
     }
-    if( !i ) return null;
+    if( i == -1 ) return null;
     i = i + 4;
+    alert(i + ' в альте');
     var alt = '';
-    while( parsText.charAt(i)!='<' ){
+    while( parsText.charAt(i)!='<' && parsText.charAt(i)){
         alt = alt + parsText.charAt(i);
+        alert(i + '     ' + alt + '   ' + parsText.charAt(i));
         i++;
     }
     return alt;
 }
 
+function setOptionWidth(){
+    var $ = jQuery;
+    var data3 = {
+        'action': 'get_agi_img_width_option'
+    };
+    $.post(ajaxurl, data3, function(response){
+        agi_width_big = response[1];
+        agi_width = response[0];
+    },"json");
+}
 
-
-
+function onMouse() {
+    var on;
+    var delay = 2000;
+    jQuery('.agi_img_add').mouseover(function () {
+        on = true;
+        setTimeout(function () {
+            if(on) jQuery('.btns_instruct').show();
+        },delay)
+    });
+    jQuery('.agi_img_add').mouseleave(function () {
+        on = false;
+        jQuery('.btns_instruct').hide();
+    });
+}

@@ -28,10 +28,49 @@ function fseo_agi_setup_menu() {
     // подуровни
     add_submenu_page( 'fseo_agi_settings_page', 'Настройки', 'Настройки', 'manage_options', 'f-seo-agi',  'sb_admin_fseo_agi_sett');
 
-    add_action( 'admin_init', 'register_fseo_csv_settings' );
+    add_action( 'admin_init', 'register_agi_settings' );
 }
 add_action('admin_menu', 'fseo_agi_setup_menu');
 
+
+function register_agi_settings(){
+    register_setting( 'agi_settings-group', 'agi_img_width' );
+}
+
+function sb_admin_fseo_agi_sett(){
+    ?>
+        <h1>Настройки F-Seo-Auto-Google-Images</h1>
+    <?php
+    //var_dump($_POST['agi_img_width']);
+    if($_POST['agi_img_width'] != get_option('agi_img_width') && $_POST['agi_img_width']) update_option( 'agi_img_width', $_POST['agi_img_width']);
+    if($_POST['agi_img_big_width'] != get_option('agi_img_big_width') && $_POST['agi_img_width']) update_option( 'agi_img_big_width', $_POST['agi_img_big_width']);
+    settings_fields( 'fseo-csv-settings-group' );
+    ?>
+    <form method="post">
+        <label>Ширина картинок слева-справа</label>
+        <select name="agi_img_width" id="agi_img_width">
+            <option value="300" <?php if(get_option('agi_img_width') == 300) echo 'selected="selected"';?>>300</option>
+            <option value="400" <?php if(get_option('agi_img_width') == 400) echo 'selected="selected"';?>>400</option>
+        </select>
+        <label>Ширина больших картинок</label>
+        <select name="agi_img_big_width" id="agi_img_big_width">
+            <option value="600" <?php if(get_option('agi_img_big_width') == 600) echo 'selected="selected"';?>>600</option>
+            <option value="700" <?php if(get_option('agi_img_big_width') == 700) echo 'selected="selected"';?>>700</option>
+            <option value="750" <?php if(get_option('agi_img_big_width') == 750) echo 'selected="selected"';?>>750</option>
+        </select>
+        <p class="submit"><input type="submit" class="button-primary" value="Сохранить" /></p>
+    </form>
+    <?php
+}
+
+function get_agi_img_width_option(){
+    $options = array();
+    $options[0] = get_option('agi_img_width');
+    $options[1] = get_option('agi_img_big_width');
+    echo json_encode($options);
+    die();
+}
+add_action('wp_ajax_get_agi_img_width_option', 'get_agi_img_width_option' );
 
 function agi_admin_head(){
     $id = (int) get_the_ID();
@@ -93,6 +132,8 @@ function google_images_search()
     {
         $tbs .= ",qdr:".$_POST['period'];
     }
+
+    $tbs .= ",iar:w"; 
 
     $tbs = trim($tbs, ", ");
     if (!empty($tbs)) $params['tbs'] = $tbs;
