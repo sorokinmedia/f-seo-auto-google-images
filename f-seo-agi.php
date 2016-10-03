@@ -32,9 +32,10 @@ function fseo_agi_setup_menu() {
 }
 add_action('admin_menu', 'fseo_agi_setup_menu');
 
-
+//  настройки
 function register_agi_settings(){
     register_setting( 'agi_settings-group', 'agi_img_width' );
+    register_setting( 'agi_settings-group', 'agi_img_churl' );
 }
 
 function sb_admin_fseo_agi_sett(){
@@ -42,23 +43,28 @@ function sb_admin_fseo_agi_sett(){
         <h1>Настройки F-Seo-Auto-Google-Images</h1>
     <?php
     //var_dump($_POST['agi_img_width']);
-    if($_POST['agi_img_width'] != get_option('agi_img_width') && $_POST['agi_img_width']) update_option( 'agi_img_width', $_POST['agi_img_width']);
-    if($_POST['agi_img_big_width'] != get_option('agi_img_big_width') && $_POST['agi_img_width']) update_option( 'agi_img_big_width', $_POST['agi_img_big_width']);
+    if($_SERVER['REQUEST_METHOD']=='POST') {
+        if ($_POST['agi_img_width'] != get_option('agi_img_width') && $_POST['agi_img_width']) update_option('agi_img_width', $_POST['agi_img_width']);
+        if ($_POST['agi_img_big_width'] != get_option('agi_img_big_width') && $_POST['agi_img_width']) update_option('agi_img_big_width', $_POST['agi_img_big_width']);
+        if ($_POST['agi_img_churl'] != get_option('agi_img_churl')) update_option('agi_img_churl', $_POST['agi_img_churl']); 
+    }
     settings_fields( 'fseo-csv-settings-group' );
     ?>
     <form method="post">
-        <label>Ширина картинок слева-справа</label>
-        <select name="agi_img_width" id="agi_img_width">
+        <label class="clear d_block">Ширина картинок слева-справа</label>
+        <select name="agi_img_width" id="agi_img_width" class="clear d_block">
             <option value="300" <?php if(get_option('agi_img_width') == 300) echo 'selected="selected"';?>>300</option>
             <option value="400" <?php if(get_option('agi_img_width') == 400) echo 'selected="selected"';?>>400</option>
         </select>
-        <label>Ширина больших картинок</label>
-        <select name="agi_img_big_width" id="agi_img_big_width">
+        <label class="clear d_block">Ширина больших картинок</label>
+        <select name="agi_img_big_width" id="agi_img_big_width" class="clear d_block">
             <option value="600" <?php if(get_option('agi_img_big_width') == 600) echo 'selected="selected"';?>>600</option>
             <option value="700" <?php if(get_option('agi_img_big_width') == 700) echo 'selected="selected"';?>>700</option>
             <option value="750" <?php if(get_option('agi_img_big_width') == 750) echo 'selected="selected"';?>>750</option>
         </select>
-        <p class="submit"><input type="submit" class="button-primary" value="Сохранить" /></p>
+        <label class="clear d_block">Убрать "плохие картинки" из выдачи (замедлит поиск в 3 раза)</label>
+        <input name="agi_img_churl" class="clear d_block" id="agi_img_churl" type="checkbox" <?php if(get_option('agi_img_churl')) echo 'checked="checked"'; ?>  />
+        <p class="submit"><input type="submit" class="button-primary" value="Сохранить" /></p> 
     </form>
     <?php
 }
@@ -81,7 +87,8 @@ function agi_admin_head(){
 add_action('admin_head','agi_admin_head');
 
 
-function google_images_search()
+// поиск и загрузка картинок
+function agi_google_images_search()
 {
 
     $params = array(
@@ -163,6 +170,11 @@ function google_images_search()
             $item[$key] = $value;
         }
         $item['imgurl']=$item['mages.google.com/imgres?imgurl'];
+
+        if(get_option('agi_img_churl')){
+            $check = fopen($item['imgurl'],"r");if($check) $item['churl'] = 'norm';else $item['churl'] = 'b9ka'; fclose($check);
+        }
+
         $item['thumbnail'] = $matches[2][$number];
         $items[] = $item;
     }
@@ -170,9 +182,9 @@ function google_images_search()
     echo json_encode($items);
     die();
 }
-add_action('wp_ajax_google_images_search', 'google_images_search' );
+add_action('wp_ajax_agi_google_images_search', 'agi_google_images_search' );
 
-function google_images_upload()
+function agi_google_images_upload()
 {
     $url = $_POST['url'];
     $referer = $_POST['referer'];
@@ -191,9 +203,9 @@ function google_images_upload()
     }
     if ($image->mime=='image/png')
     {
-        $filename = _getFileName($search).date("_dHis").".png";
+        $filename = _getFileNameAgi($search).date("_dHis").".png";
     } else {
-        $filename = _getFileName($search).date("_dHis").".jpg";
+        $filename = _getFileNameAgi($search).date("_dHis").".jpg";
     }
 
     //echo 123;//$image->mime . '   ' . $image->filename . '    ' . $image->files . '    ' . $image->width;
@@ -227,9 +239,9 @@ function google_images_upload()
 
     die();
 }
-add_action('wp_ajax_google_images_upload', 'google_images_upload' );
+add_action('wp_ajax_agi_google_images_upload', 'agi_google_images_upload' );
 
-function _getFileName($search)
+function _getFileNameAgi($search)
 {
     $converter = array(
         'а' => 'a',   'б' => 'b',   'в' => 'v',
@@ -279,4 +291,5 @@ function _getFileName($search)
     }
     return $search."_".($number+1);
 }
+
 

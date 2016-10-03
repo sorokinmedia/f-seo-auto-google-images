@@ -238,3 +238,13 @@ a.img_btn span{
     background: #e95f5f;
     color: #ffffff;
 }
+.clear{
+    clear: both;
+}
+.d_block{
+    display: block;
+    margin-bottom: 15px;
+}
+label.d_block{
+    margin-bottom: 5px;
+}
