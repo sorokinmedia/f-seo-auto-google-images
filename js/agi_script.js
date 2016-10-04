@@ -122,7 +122,7 @@ jQuery(document).ready(function() {
         googleImagesPage = 0;
         agi_googleImagesSearch();
     });
-    jQuery('.prev_p').click(function () {
+    jQuery('.prev_p').click(function () { 
         if(googleImagesPage > 0) googleImagesPage--;
         agi_googleImagesSearch();
     });

@@ -6,7 +6,7 @@
  * Date: 18.09.2016
  * Time: 16:04
  */
-class GoogleImage{
+class AgiGoogleImage{
     public $mime = false; 
     public $filename;
     public $width;
@@ -39,7 +39,7 @@ class GoogleImage{
                 $this->mime = $mime;
                 break;
             default:
-                throw new Exception("GoogleImage::__construct() unsupported mime type: ".$mime);
+                throw new Exception("AgiGoogleImage::__construct() unsupported mime type: ".$mime);
         }
         $this->filename = sys_get_temp_dir()."/".time().rand(0, 99999);
         file_put_contents($this->filename, $response['body']);
@@ -59,7 +59,7 @@ class GoogleImage{
                 $this->_gd_handle = imagecreatefromgif($this->files);
                 break;
             default:
-                throw new \Exception("GoogleImage::__construct() - unsupported mime type: " + $mime);
+                throw new \Exception("AgiGoogleImage::__construct() - unsupported mime type: " + $mime);
         }
 
         $this->width = imagesx($this->_gd_handle);

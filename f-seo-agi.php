@@ -9,7 +9,7 @@ Author URI: http://f-seo.ru/
 
 define ( 'FSEO_AGI_CURRENT_VERSION',  '1.0' );
 
-include(dirname(__FILE__).'/GoogleImage.php');
+include(dirname(__FILE__).'/AgiGoogleImage.php');
 
 
 // Подключаем JS скрипт
@@ -71,8 +71,15 @@ function sb_admin_fseo_agi_sett(){
 
 function get_agi_img_width_option(){
     $options = array();
-    $options[0] = get_option('agi_img_width');
-    $options[1] = get_option('agi_img_big_width');
+
+    if(get_option('agi_img_width') &&  get_option('agi_img_big_width')){
+        $options[0] = get_option('agi_img_width');
+        $options[1] = get_option('agi_img_big_width');
+    }
+    else{
+        $options[0] = 300;
+        $options[1] = 600;   
+    }
     echo json_encode($options);
     die();
 }
@@ -194,7 +201,7 @@ function agi_google_images_upload()
 
     try
     {
-        $image = new GoogleImage($url, $referer);
+        $image = new AgiGoogleImage($url, $referer);
     }
     catch(Exception $e)
     {
