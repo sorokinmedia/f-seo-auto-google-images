@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="investk2">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="avilla">
     <serverData>
       <paths name="DO">
         <serverdata>
@@ -16,10 +16,17 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="avilla">
+      <paths name="albano_proz">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="avilla">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/lady-up.ru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
@@ -89,7 +96,7 @@
       <paths name="investk2">
         <serverdata>
           <mappings>
-            <mapping deploy="/otdix-na-altai.ru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$/../f-seo-auto-google-images" web="/" />
+            <mapping deploy="/otdix-na-altai.ru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

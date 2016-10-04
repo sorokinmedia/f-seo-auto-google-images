@@ -366,6 +366,17 @@ function getNearestTitle(pos) {
         i = res.index;
     }
     if( i == -1 ) return null;
+
+    // для р3
+    var regexp = /<h3>/gi;
+    var res3; var i3=-1;
+    while( res3 = regexp.exec(parsText) ){
+        i3 = res3.index;
+    }
+    if( i3 >= 0){
+        if(i3 > i) i = i3;  
+    }
+
     i = i + 4;
     var alt = '';
     while( parsText.charAt(i)!='<' && parsText.charAt(i)){
