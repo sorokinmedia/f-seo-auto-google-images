@@ -152,8 +152,12 @@ jQuery(document).ready(function() {
                 var selection = window.getSelection();
                 selection.removeAllRanges();
             }
-            jQuery('.agi_popup').hide();
-            jQuery('.agi_window').hide();
+            if(jQuery('.agi_preview').css('display') == 'block'){
+                jQuery('.agi_preview').hide();
+            }else {
+                jQuery('.agi_popup').hide();
+                jQuery('.agi_window').hide();
+            }
         }
         if(e.keyCode == 13 && jQuery('.agi_srch_txt').is( ":focus" )){  //search on enter
             if(window.getSelection){
