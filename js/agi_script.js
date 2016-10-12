@@ -5,6 +5,7 @@ var carPos;
 var alt;
 var agi_width_big;
 var agi_width;
+var onSelected;
 
 function addHtml() {
     jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertBefore('#insert-media-button');
@@ -80,11 +81,7 @@ jQuery(document).ready(function() {
     addHtml();
     // Обработаем клик
     jQuery('.img_btn').click(function () {
-        /*if(window.getSelection){
-            carPos = jQuery('#content')[0].selectionStart; // Мониторим положение курсора в редакторе
-            var selection = window.getSelection();
-            selection.removeAllRanges();
-        }*/
+
         if(!carPos) carPos = 0;
 
         //вывести окно
@@ -93,15 +90,23 @@ jQuery(document).ready(function() {
 
         alt = getNearestTitle(carPos);
 
-        var selectText = ShowSelection();
+        var selectText = onSelected;//ShowSelection();
         if(selectText != ''){
-            carPos = carPos + selectText.length;
             jQuery('.agi_srch_txt').val(selectText);
             jQuery('a.srch_btn').trigger('click');
         }
 
         jQuery('.agi_srch_txt').focus();
 
+    });
+
+    //ОБработаем выделение текста
+    jQuery("#content").select(function () {
+        //alert("тык");
+        var stxt = ShowSelection();
+        if( 0 < stxt.length < 100){
+            onSelected = stxt;
+        }
     });
     //сделать запрос Гуглу
     // распарсить ответ
@@ -141,9 +146,11 @@ jQuery(document).ready(function() {
         e = e || window.event;
         if(e.ctrlKey && e.keyCode == 73){ //ctrl+i
             e.preventDefault();
-            jQuery('.agi_popup').show();
-            jQuery('.agi_window').show();
-            //jQuery('.img_btn').trigger('click');
+            if(window.getSelection){
+                carPos = jQuery('#content')[0].selectionStart; // Мониторим положение курсора в редакторе 
+            }
+            jQuery('.img_btn').trigger('click');
+            window.getSelection().removeAllRanges();
             jQuery('.agi_srch_txt').focus();
 
         }
@@ -152,7 +159,7 @@ jQuery(document).ready(function() {
                 var selection = window.getSelection();
                 selection.removeAllRanges();
             }
-            if(jQuery('.agi_preview').css('display') == 'block'){
+            if(jQuery('.agi_preview').css('display') == 'block'){ 
                 jQuery('.agi_preview').hide();
             }else {
                 jQuery('.agi_popup').hide();
@@ -179,6 +186,7 @@ jQuery(document).ready(function() {
             textComponent.focus();
             var sel = document.selection.createRange();
             selectedText = sel.text;
+            document.selection.empty();
         }
         // Mozilla version
         else if (textComponent.selectionStart != undefined)
@@ -275,7 +283,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,agi_width);
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium');
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -283,7 +291,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,agi_width);
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium');
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -291,25 +299,25 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,agi_width);
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium');
         });
         jQuery('.r_300').click(function () {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,agi_width);
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium');
         });
         jQuery('.add_600').click(function () {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),cen,agi_width_big);
+            agi_googleImagesUpload(rem.find('.agi_img_res'),cen,'large');
         });
         jQuery('.close_600').click(function () {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),cen,agi_width_big);
+            agi_googleImagesUpload(rem.find('.agi_img_res'),cen,'large');
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -330,7 +338,8 @@ function agi_googleImagesUpload(item, side, width, altI) {
         'url': item.attr('url'),
         'referer': item.attr('referer'),
         'post_id': googleImagesPostId,
-        'search': item.attr('q')
+        'search': item.attr('q'),
+        'width': width
     };
     $.post(ajaxurl, data2, function(response){
         var pathname = jQuery(location).attr('host');

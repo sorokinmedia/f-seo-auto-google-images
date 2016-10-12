@@ -72,9 +72,9 @@ function sb_admin_fseo_agi_sett(){
 function get_agi_img_width_option(){
     $options = array();
 
-    if(get_option('agi_img_width') &&  get_option('agi_img_big_width')){
-        $options[0] = get_option('agi_img_width');
-        $options[1] = get_option('agi_img_big_width');
+    if(get_option('medium_size_w') &&  get_option('large_size_w')){
+        $options[0] = get_option('medium_size_w');
+        $options[1] = get_option('large_size_w');
     }
     else{
         $options[0] = 300;
@@ -147,7 +147,7 @@ function agi_google_images_search()
         $tbs .= ",qdr:".$_POST['period'];
     }
 
-    $tbs .= ",iar:w"; 
+    //$tbs .= ",iar:w";
 
     $tbs = trim($tbs, ", ");
     if (!empty($tbs)) $params['tbs'] = $tbs;
@@ -194,11 +194,11 @@ add_action('wp_ajax_agi_google_images_search', 'agi_google_images_search' );
 function agi_google_images_upload()
 {
     $url = $_POST['url'];
+    $width = $_POST['width'];
     $referer = $_POST['referer'];
     $post_id = $_POST['post_id'];
     $search = $_POST['search'];
-
-
+    
     try
     {
         $image = new AgiGoogleImage($url, $referer);
@@ -239,6 +239,13 @@ function agi_google_images_upload()
     wp_update_attachment_metadata( $attachment_id, $attach_data );
     update_attached_file( $attachment_id, $upload_dir['path']."/".$filename);
 
+    $short_name = '';
+    if(strpos($filename, '.jpg'))$short_name = str_replace('.jpg','' ,$filename );
+    if(strpos($filename, '.png'))$short_name = str_replace('.png','' ,$filename );
+    if(strpos($filename, '.gif'))$short_name = str_replace('.gif','' ,$filename );
+
+    $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path']);
+
     $pos = strpos($file_dir,'/wp-content');
     $file_dir = substr($file_dir, $pos); 
     $file_dir = str_replace('/public_html','',$file_dir );
@@ -247,6 +254,42 @@ function agi_google_images_upload()
     die();
 }
 add_action('wp_ajax_agi_google_images_upload', 'agi_google_images_upload' );
+
+function listdir_by_date($path){
+    $dir = opendir($path);
+    $list = array();
+    while($file = readdir($dir)){
+        if ($file != '.' and $file != '..'){
+            // кроме даты создания файлы добавляем ещё и имя
+            // чтобы удостоверится, что мы не заменяем ключ массива
+            // $ctime = filectime($data_path . $file) . ',' . $file;
+            // UPD:
+            $ctime = filectime($path . '/' . $file) . ',' . $file;
+            $list[$ctime] = $file;
+        }
+    }
+    closedir($dir);
+    krsort($list);
+    return $list;
+}
+
+function getFileNameWithSize($find_file_name,$path){
+    //$path = '/home/i/investk2/otdix-na-altai.ru/public_html/wp-content/uploads/2016/10';
+    $names = listdir_by_date($path);
+    $i = 0;
+    $res = $find_file_name;
+    foreach ( $names as $name){
+        //print_r($name . '<br/>');
+        $s = strpos($name,$find_file_name);
+        if($s || $s === 0){
+            $res = $name;
+            break;
+        }
+        if($i>10) break;
+        $i++;
+    }
+    return $res;
+}
 
 function _getFileNameAgi($search)
 {
