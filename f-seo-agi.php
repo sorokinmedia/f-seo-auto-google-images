@@ -34,7 +34,7 @@ add_action('admin_menu', 'fseo_agi_setup_menu');
 
 //  настройки
 function register_agi_settings(){
-    register_setting( 'agi_settings-group', 'agi_img_width' );
+    //register_setting( 'agi_settings-group', 'agi_img_width' );
     register_setting( 'agi_settings-group', 'agi_img_churl' );
 }
 
@@ -44,24 +44,25 @@ function sb_admin_fseo_agi_sett(){
     <?php
     //var_dump($_POST['agi_img_width']);
     if($_SERVER['REQUEST_METHOD']=='POST') {
-        if ($_POST['agi_img_width'] != get_option('agi_img_width') && $_POST['agi_img_width']) update_option('agi_img_width', $_POST['agi_img_width']);
+        /*if ($_POST['agi_img_width'] != get_option('agi_img_width') && $_POST['agi_img_width']) update_option('agi_img_width', $_POST['agi_img_width']);
         if ($_POST['agi_img_big_width'] != get_option('agi_img_big_width') && $_POST['agi_img_width']) update_option('agi_img_big_width', $_POST['agi_img_big_width']);
-        if ($_POST['agi_img_churl'] != get_option('agi_img_churl')) update_option('agi_img_churl', $_POST['agi_img_churl']); 
+        */
+        if ($_POST['agi_img_churl'] != get_option('agi_img_churl')) update_option('agi_img_churl', $_POST['agi_img_churl']);
     }
     settings_fields( 'fseo-csv-settings-group' );
     ?>
     <form method="post">
-        <label class="clear d_block">Ширина картинок слева-справа</label>
+        <!--<label class="clear d_block">Ширина картинок слева-справа</label>
         <select name="agi_img_width" id="agi_img_width" class="clear d_block">
-            <option value="300" <?php if(get_option('agi_img_width') == 300) echo 'selected="selected"';?>>300</option>
-            <option value="400" <?php if(get_option('agi_img_width') == 400) echo 'selected="selected"';?>>400</option>
+            <option value="300" <?php /*if(get_option('agi_img_width') == 300) echo 'selected="selected"';*/?>>300</option>
+            <option value="400" <?php /*if(get_option('agi_img_width') == 400) echo 'selected="selected"';*/?>>400</option>
         </select>
         <label class="clear d_block">Ширина больших картинок</label>
         <select name="agi_img_big_width" id="agi_img_big_width" class="clear d_block">
-            <option value="600" <?php if(get_option('agi_img_big_width') == 600) echo 'selected="selected"';?>>600</option>
-            <option value="700" <?php if(get_option('agi_img_big_width') == 700) echo 'selected="selected"';?>>700</option>
-            <option value="750" <?php if(get_option('agi_img_big_width') == 750) echo 'selected="selected"';?>>750</option>
-        </select>
+            <option value="600" <?php /*if(get_option('agi_img_big_width') == 600) echo 'selected="selected"';*/?>>600</option>
+            <option value="700" <?php /*if(get_option('agi_img_big_width') == 700) echo 'selected="selected"';*/?>>700</option>
+            <option value="750" <?php /*if(get_option('agi_img_big_width') == 750) echo 'selected="selected"';*/?>>750</option>
+        </select>-->
         <label class="clear d_block">Убрать "плохие картинки" из выдачи (замедлит поиск в 3 раза)</label>
         <input name="agi_img_churl" class="clear d_block" id="agi_img_churl" type="checkbox" <?php if(get_option('agi_img_churl')) echo 'checked="checked"'; ?>  />
         <p class="submit"><input type="submit" class="button-primary" value="Сохранить" /></p> 
