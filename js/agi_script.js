@@ -82,6 +82,7 @@ function addHtml() {
 
 jQuery(document).ready(function() {
 
+    if(location.toString().indexOf('post=') == -1) jQuery("form#post").submit();
 
     if (jQuery("h1:first").text() == 'Изменить рубрику') {
         googleImagesPostId = jQuery("[name = 'tag_ID']").val();
