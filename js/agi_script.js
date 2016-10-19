@@ -10,7 +10,7 @@ var textArea;
 var textAreaJs;
 var agi_width_thmb;
 var LastQuery;
-
+var content;
 function addHtml() {
     jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertAfter('.wp-editor-tools');
     jQuery('<a class="thmb_btn">G<span>Автоминиатюра</span></a>').insertAfter('.img_btn');
@@ -80,9 +80,13 @@ function addHtml() {
     );
 }
 
+
+
 jQuery(document).ready(function() {
 
-    if(location.toString().indexOf('post=') == -1) jQuery("form#post").submit();
+    //content = jQuery("#content").text();
+
+    //if(location.toString().indexOf('post=') == -1) jQuery("form#post").submit();
 
     if (jQuery("h1:first").text() == 'Изменить рубрику') {
         googleImagesPostId = jQuery("[name = 'tag_ID']").val();
@@ -112,6 +116,7 @@ jQuery(document).ready(function() {
     });
 
     jQuery('.thmb_btn').click(function () {
+        //if(content!=jQuery("#content").val()) jQuery("form#post").submit();
         jQuery('.agi_window').attr('win','thmb');
         AgiWinOpen();
     });
@@ -348,7 +353,7 @@ function agi_googleImagesSearch() {
             jQuery('.agi_preview').html('').hide();
         });
 
-        jQuery('.create_thmb_btn').click(function () {
+        jQuery('.create_thmb_btn').click(function () { //добавляем миниатюру
             var rem = jQuery(this).parent();
             //rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
@@ -356,8 +361,7 @@ function agi_googleImagesSearch() {
             setTimeout(function(){
                 jQuery('.agi_popup').toggle();
                 jQuery('.agi_window').toggle();
-                location.reload()
-            }, 5000);
+            }, 3000);
         });
 
         var left = 'alignleft'; var right = 'alignright'; var cen = 'aligncenter'; var photoNum = 0;
@@ -456,7 +460,10 @@ function agi_googleThumbnailUpload(item) {
     };
     $.post(ajaxurl, data_thmb, function(response){
         item.find('.load_img').text('Добавлено');
-    });
+        jQuery('#_thumbnail_id').val(response[0]);
+        alert(response[0]);
+        jQuery('#set-post-thumbnail img').attr('src', response[1]);
+    },"json");
 
 }
 
