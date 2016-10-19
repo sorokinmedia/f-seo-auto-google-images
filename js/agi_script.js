@@ -461,7 +461,7 @@ function agi_googleThumbnailUpload(item) {
     $.post(ajaxurl, data_thmb, function(response){
         item.find('.load_img').text('Добавлено');
         jQuery('#_thumbnail_id').val(response[0]);
-        jQuery('#set-post-thumbnail img').attr('src', response[1]);
+        jQuery('#set-post-thumbnail img').attr('src', response[1]); 
     },"json");
 
 }
