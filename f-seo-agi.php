@@ -3,11 +3,11 @@
 Plugin Name: F-Seo Auto Google Images
 Description: Плагин автоматической подгрузки картинок из Google Images в текстовый редактор WordPress, FAQ
 Author: F-Seo
-Version: 1.0
+Version: 2.0
 Author URI: http://f-seo.ru/
 */
 
-define ( 'FSEO_AGI_CURRENT_VERSION',  '1.0' );
+define ( 'FSEO_AGI_CURRENT_VERSION',  '2.0' );
 
 include(dirname(__FILE__).'/AgiGoogleImage.php');
 
@@ -16,6 +16,7 @@ include(dirname(__FILE__).'/AgiGoogleImage.php');
 function fseo_agi_init(){
     wp_enqueue_style('agi_style', plugins_url('css/agi_style.css', __FILE__), null, FSEO_AGI_CURRENT_VERSION, 'all');
     wp_enqueue_script('agi_script', plugins_url( 'js/agi_script.js', __FILE__ ), false, FSEO_AGI_CURRENT_VERSION);
+    wp_enqueue_script('agi_script', plugins_url( 'js/agi_script_thmb.js', __FILE__ ), false, FSEO_AGI_CURRENT_VERSION);
     //echo '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
 }
 add_action( 'admin_init', 'fseo_agi_init' );
@@ -76,10 +77,12 @@ function get_agi_img_width_option(){
     if(get_option('medium_size_w') &&  get_option('large_size_w')){
         $options[0] = get_option('medium_size_w');
         $options[1] = get_option('large_size_w');
+        $options[2] = get_option('thumbnail_size_w');
     }
     else{
         $options[0] = 300;
-        $options[1] = 600;   
+        $options[1] = 600;
+        $options[2] = 250;
     }
     echo json_encode($options);
     die();
@@ -199,6 +202,7 @@ function agi_google_images_upload()
     $referer = $_POST['referer'];
     $post_id = $_POST['post_id'];
     $search = $_POST['search'];
+    $thumb = $_POST['thumb'];
     
     try
     {
@@ -245,7 +249,8 @@ function agi_google_images_upload()
     if(strpos($filename, '.png'))$short_name = str_replace('.png','' ,$filename );
     if(strpos($filename, '.gif'))$short_name = str_replace('.gif','' ,$filename );
 
-    $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path']);
+    if($thumb) update_post_meta( $post_id, '_thumbnail_id', $attachment_id );
+    if($width) $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path']);
 
     $pos = strpos($file_dir,'/wp-content');
     $file_dir = substr($file_dir, $pos); 

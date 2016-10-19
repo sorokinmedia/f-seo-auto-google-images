@@ -6,10 +6,16 @@ var alt;
 var agi_width_big;
 var agi_width;
 var onSelected;
+var textArea;
+var textAreaJs;
+var agi_width_thmb;
+var LastQuery;
 
 function addHtml() {
-    jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertBefore('#insert-media-button');
-    jQuery('.wp-admin').append('<div class="agi_popup"></div>>');
+    jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertAfter('.wp-editor-tools');
+    jQuery('<a class="thmb_btn">G<span>Автоминиатюра</span></a>').insertAfter('.img_btn');
+    jQuery('<span class="after_img_btn"></span>').insertAfter('.thmb_btn');
+    jQuery('.wp-admin').append('<div class="agi_popup"></div>');
     jQuery('.wp-admin').append('<div class="agi_preview"></div>');
     jQuery('.wp-admin').append('<div class="agi_window"></div>');
 
@@ -18,7 +24,7 @@ function addHtml() {
         '<a class="srch_btn">Find</a>' +
         '</div></div>');
 
-    jQuery('.agi_window').append('<div class="agi_results"></div><span class="popap_cross"></span><span class="btns_instruct"></span>');
+    jQuery('.agi_window').append('<div class="agi_results"></div><span class="pages prev_p"></span><span class="numpage"></span><span class="pages next_p">Next→</span><span class="popap_cross"></span>');
     jQuery('.afi_win_left').append('<div class="agi_param"></div>');
 
     jQuery('.btns_instruct').append('"+"  -  добавить картинку и сотаться на странице попап (если нажать на кнопку без плюса, окно закоется)' +
@@ -71,43 +77,63 @@ function addHtml() {
             +'<option value="white">Белые</option>'
             +'<option value="yellow">Желтые</option>'
         +'</select>'
-        +'<span class="pages prev_p">Prev page</span><span class="pages next_p">Next page</span>'
     );
 }
 
 jQuery(document).ready(function() {
 
+
+    if (jQuery("h1:first").text() == 'Изменить рубрику') {
+        googleImagesPostId = jQuery("[name = 'tag_ID']").val();
+    }
+    jQuery("#descr_descrtop").focus(function () {
+        textArea = jQuery("#descr_descrtop");
+        textAreaJs = document.getElementById('descr_descrtop');
+    });
+    jQuery("#descr_descrbottom").focus(function () {
+        textArea = jQuery("#descr_descrbottom");
+        textAreaJs = document.getElementById('descr_descrbottom');
+    });
+    if (jQuery("h1:first").text() == 'Редактировать запись Добавить новую') {
+        textArea = jQuery("#content");
+        textAreaJs = document.getElementById('content');
+    }
+
+
+
     // Добавим  html
     addHtml();
+
     // Обработаем клик
     jQuery('.img_btn').click(function () {
+        jQuery('.agi_window').attr('win','img');
+        AgiWinOpen();
+    });
 
-        if(!carPos) carPos = 0;
-
-        //вывести окно
-        jQuery('.agi_popup').toggle();
-        jQuery('.agi_window').toggle();
-
-        alt = getNearestTitle(carPos);
-
-        var selectText = onSelected;//ShowSelection();
-        if(selectText != ''){
-            jQuery('.agi_srch_txt').val(selectText);
-            jQuery('a.srch_btn').trigger('click');
-        }
-
-        jQuery('.agi_srch_txt').focus();
-
+    jQuery('.thmb_btn').click(function () {
+        jQuery('.agi_window').attr('win','thmb');
+        AgiWinOpen();
     });
 
     //ОБработаем выделение текста
     jQuery("#content").select(function () {
-        //alert("тык");
-        var stxt = ShowSelection();
-        if( 0 < stxt.length < 100){
-            onSelected = stxt;
-        }
+        OnSelect();
     });
+    jQuery("#descr_descrtop").select(function () {
+        OnSelect();
+    });
+    jQuery("#descr_descrbottom").select(function () {
+        OnSelect();
+    });
+
+    function OnSelect() {
+        googleImagesPage = 0;
+        var stxt = ShowSelection();
+        if( 2 < stxt.length && stxt.length < 100){
+            onSelected = stxt;
+            jQuery('.after_img_btn').html(onSelected);
+        }
+    }
     //сделать запрос Гуглу
     // распарсить ответ
     //вывести ответ
@@ -125,19 +151,33 @@ jQuery(document).ready(function() {
     // Поиск
     jQuery('a.srch_btn').click(function () {
         googleImagesPage = 0;
+        jQuery('.prev_p').html('');
         agi_googleImagesSearch();
     });
     jQuery('.prev_p').click(function () { 
         if(googleImagesPage > 0) googleImagesPage--;
+        jQuery('.numpage').text(googleImagesPage);
+        if(googleImagesPage == 0) {
+            jQuery('.prev_p').html('');
+            jQuery('.numpage').text('');
+        }
         agi_googleImagesSearch();
     });
     jQuery('.next_p').click(function () {
         googleImagesPage++;
+        if(googleImagesPage == 1 ) jQuery('.prev_p').html('←Prev');
+        jQuery('.numpage').text(googleImagesPage);
         agi_googleImagesSearch();
     });
 
     // Мониторим положение курсора в редакторе
-    jQuery('#content').focusout(function () {
+    jQuery("#content").focusout(function () {
+        carPos = jQuery(this)[0].selectionStart;
+    });
+    jQuery("#descr_descrtop").focusout(function () {
+        carPos = jQuery(this)[0].selectionStart;
+    });
+    jQuery("#descr_descrbottom").focusout(function () {
         carPos = jQuery(this)[0].selectionStart;
     });
 
@@ -147,9 +187,9 @@ jQuery(document).ready(function() {
         if(e.ctrlKey && e.keyCode == 73){ //ctrl+i
             e.preventDefault();
             if(window.getSelection){
-                carPos = jQuery('#content')[0].selectionStart; // Мониторим положение курсора в редакторе 
+                carPos = textArea[0].selectionStart; // Мониторим положение курсора в редакторе
             }
-            jQuery('.img_btn').trigger('click');
+            AgiWinOpen();
             window.getSelection().removeAllRanges();
             jQuery('.agi_srch_txt').focus();
 
@@ -175,10 +215,31 @@ jQuery(document).ready(function() {
         }
     }
 
+    //Ф-я открытия окна
+
+    function AgiWinOpen() {
+        if(!carPos) carPos = 0;
+
+        //вывести окно
+        jQuery('.agi_popup').toggle();
+        jQuery('.agi_window').toggle();
+
+        alt = getNearestTitle(carPos);
+
+        var selectText = onSelected;//ShowSelection();
+        if(selectText != '' && selectText != LastQuery){
+            jQuery('.agi_srch_txt').val(selectText);
+            jQuery('a.srch_btn').trigger('click');
+            LastQuery = selectText;
+        }
+
+        jQuery('.agi_srch_txt').focus();
+    }
+
     // Ф-я чтения выделенного
     function ShowSelection()
     {
-        var textComponent = document.getElementById('content');
+        var textComponent = textAreaJs;
         var selectedText;
         // IE version
         if (document.selection != undefined)
@@ -248,7 +309,7 @@ function agi_googleImagesSearch() {
             var onclick = '';
             var deny_click = 'click';
             if(Number(items[i].w) < Number(agi_width_big)) {
-                onclick = 'style="background-color:#ccc" onclick="return null" ';
+                onclick = 'style="background-color:#ccc; border-color:#ccc;" onclick="return null" ';
                 deny_click = 'deny';
             }
 
@@ -256,20 +317,22 @@ function agi_googleImagesSearch() {
                 + '" url="' + items[i].imgurl + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
-                + '<div><span class="agi_img_add l_300_close" data-toggle="tooltip" title="Добавить слева (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">←'
+            var html_img = '<div><span class="agi_img_add l_300_close" data-toggle="tooltip" title="Добавить слева (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">←'
                     +agi_width+'</span>'
                 + '<span class="agi_img_add r_300_close" data-toggle="tooltip" title="Добавить справа (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">'
                     +agi_width+'→</span>'
                 + '<span class="agi_img_add close_600" '+ ' deny="' + deny_click + '" '+onclick+' data-toggle="tooltip" title="Добавить в центр (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">'
                     +agi_width_big+'</span>'
-                + '<span class="agi_img_add l_300" data-toggle="tooltip" title="Добавить слева (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">←'
+                + '<span class="agi_img_add l_300 yellow_btn" data-toggle="tooltip" title="Добавить слева (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">←'
                     +agi_width+'+</span>'
-                + '<span class="agi_img_add r_300" data-toggle="tooltip" title="Добавить справа (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">→'
+                + '<span class="agi_img_add r_300 yellow_btn" data-toggle="tooltip" title="Добавить справа (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">→'
                     +agi_width+'+</span>'
-                + '<span class="agi_img_add add_600" ' + ' deny="' + deny_click + '" '+onclick+' data-toggle="tooltip" title="Добавить в центр (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">+'
+                + '<span class="agi_img_add add_600 yellow_btn" ' + ' deny="' + deny_click + '" '+onclick+' data-toggle="tooltip" title="Добавить в центр (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">+'
                     +agi_width_big+'</span>'
                 +'</div></div>';
-            jQuery('.agi_results').append(html);
+            var html_thmb = '<div class="create_thmb_btn">Make the thumbnail</div></div>';
+            if(jQuery('.agi_window').attr('win') == 'img' && Number(items[i].w) > Number(agi_width)) jQuery('.agi_results').append(html + html_img);
+            if(jQuery('.agi_window').attr('win') == 'thmb' && Number(items[i].w) > Number(agi_width_thmb)) jQuery('.agi_results').append(html + html_thmb);
         }
 
         jQuery('.agi_img_res').click(function () {
@@ -284,7 +347,16 @@ function agi_googleImagesSearch() {
             jQuery('.agi_preview').html('').hide();
         });
 
-        var left = 'alignleft'; var right = 'alignright'; var cen = 'aligncenter';
+        jQuery('.create_thmb_btn').click(function () {
+            var rem = jQuery(this).parent();
+            //rem = rem.parent();
+            rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
+            agi_googleThumbnailUpload(rem.find('.agi_img_res'));
+            jQuery('.agi_popup').toggle();
+            jQuery('.agi_window').toggle();
+        });
+
+        var left = 'alignleft'; var right = 'alignright'; var cen = 'aligncenter'; var photoNum = 0;
 
         jQuery('.l_300_close').click(function () {
             var rem = jQuery(this).parent();
@@ -303,27 +375,30 @@ function agi_googleImagesSearch() {
             jQuery('.agi_window').toggle();
         });
         jQuery('.l_300').click(function () {
+            photoNum++;
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium');
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium','Фото ' + photoNum );
         });
         jQuery('.r_300').click(function () {
+            photoNum++;
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium');
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium','Фото ' + photoNum );
         });
         jQuery('.add_600').click(function () {
+            photoNum++;
             if(jQuery(this).attr('deny') == 'click') {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large');
+                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large','Фото ' + photoNum );
             }
         });
         jQuery('.close_600').click(function () {
-            if(jQuery(this).attr('deny') == 'click') {
+            if(jQuery(this).attr('deny') == click) {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
@@ -364,9 +439,26 @@ function agi_googleImagesUpload(item, side, width, altI) {
 
 }
 
+function agi_googleThumbnailUpload(item) {
+    var $ = jQuery;
+
+    var data_thmb = {
+        'action': 'agi_google_images_upload',
+        'url': item.attr('url'),
+        'referer': item.attr('referer'),
+        'post_id': googleImagesPostId,
+        'search': item.attr('q'),
+        'thumb':true
+    };
+    $.post(ajaxurl, data_thmb, function(response){
+        item.find('.load_img').text('Добавлено');
+    });
+
+}
+
 function InsertByCaretPos(p,value) {
     var $ = jQuery;
-    var ta = $('#content');
+    var ta = textArea;
         //p = ta[0].selectionStart;
         text = ta.val();
     if(p != undefined) {
@@ -382,7 +474,7 @@ function InsertByCaretPos(p,value) {
 
 function getNearestTitle(pos) {
     var $ = jQuery;
-    var str = $('#content').val();
+    var str = textArea.val();
     var parsText = str.slice(0,pos);
     var regexp = /<h2>/gi;
     var res; var i=-1;
@@ -418,6 +510,7 @@ function setOptionWidth(){
     $.post(ajaxurl, data3, function(response){
         agi_width_big = response[1];
         agi_width = response[0];
+        agi_width_thmb = response[2];
     },"json");
 }
 
