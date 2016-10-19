@@ -352,8 +352,11 @@ function agi_googleImagesSearch() {
             //rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
             agi_googleThumbnailUpload(rem.find('.agi_img_res'));
-            jQuery('.agi_popup').toggle();
-            jQuery('.agi_window').toggle();
+            setTimeout(function(){
+                jQuery('.agi_popup').toggle();
+                jQuery('.agi_window').toggle();
+                location.reload()
+            }, 5000);
         });
 
         var left = 'alignleft'; var right = 'alignright'; var cen = 'aligncenter'; var photoNum = 0;
