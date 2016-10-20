@@ -251,7 +251,7 @@ function agi_google_images_upload()
 
     if($thumb) {
         update_post_meta( $post_id, '_thumbnail_id', $attachment_id );
-        $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name, $upload_dir['path'],270);
+        $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option('medium_size_w'),$upload_dir['path']);
     }
     if($width) $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path']);
 
@@ -288,7 +288,7 @@ function listdir_by_date($path){
     return $list;
 }
 
-function getFileNameWithSize($find_file_name,$path,$thmb_hight = 0){
+function getFileNameWithSize($find_file_name,$path){
     //$path = '/home/i/investk2/otdix-na-altai.ru/public_html/wp-content/uploads/2016/10';
     $names = listdir_by_date($path);
     $i = 0;
@@ -297,10 +297,6 @@ function getFileNameWithSize($find_file_name,$path,$thmb_hight = 0){
         //print_r($name . '<br/>');
         $s = strpos($name,$find_file_name);
         if($s || $s === 0){
-            if($thmb_hight && strpos($name,'x' . $thmb_hight)){
-                $res = $name;
-                break;
-            }
             $res = $name;
             break;
         }

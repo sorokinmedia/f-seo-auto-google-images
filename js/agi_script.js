@@ -459,9 +459,11 @@ function agi_googleThumbnailUpload(item) {
         'thumb':true
     };
     $.post(ajaxurl, data_thmb, function(response){
+        var pathname = jQuery(location).attr('host');
         item.find('.load_img').text('Добавлено');
+        alert(response[0]+'     '+'http://' + pathname + response[1]);
         jQuery('#_thumbnail_id').val(response[0]);
-        jQuery('#set-post-thumbnail img').attr('src', response[1]); 
+        jQuery('#set-post-thumbnail').html('<img src="http://' + pathname + response[1] + '" />');
     },"json");
 
 }
