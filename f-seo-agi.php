@@ -296,7 +296,7 @@ function getFileNameWithSize($find_file_name,$path){
     foreach ( $names as $name){
         //print_r($name . '<br/>');
         $s = strpos($name,$find_file_name);
-        if($s || $s === 0){
+        if($s || $s === 0){ 
             $res = $name;
             break;
         }

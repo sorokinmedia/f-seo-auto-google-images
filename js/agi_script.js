@@ -90,6 +90,7 @@ jQuery(document).ready(function() {
 
     if (jQuery("h1:first").text() == 'Изменить рубрику') {
         googleImagesPostId = jQuery("[name = 'tag_ID']").val();
+        jQuery('.thmb_btn').hide();
     }
     jQuery("#descr_descrtop").focus(function () {
         textArea = jQuery("#descr_descrtop");
@@ -108,6 +109,10 @@ jQuery(document).ready(function() {
 
     // Добавим  html
     addHtml();
+
+    if (jQuery("h1:first").text() == 'Изменить рубрику') {
+        jQuery('.thmb_btn').hide(); 
+    }
 
     // Обработаем клик
     jQuery('.img_btn').click(function () {
