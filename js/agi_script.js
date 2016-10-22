@@ -324,6 +324,11 @@ function agi_googleImagesSearch() {
                 deny_click = 'deny';
             }
 
+            var orientation;
+            if(items[i].w > items[i].h) orientation = 'horizontal';
+            else if(items[i].w < items[i].h) orientation = 'vertical';
+            else orientation = 'square';
+
             var html = '<div class="founded_img" mark=""><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
                 + '" url="' + items[i].imgurl + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
@@ -375,7 +380,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium');
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',orientation);
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -383,7 +388,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium');
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',orientation);
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -392,14 +397,14 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium','Фото ' + photoNum );
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',orientation,'Фото ' + photoNum );
         });
         jQuery('.r_300').click(function () {
             photoNum++;
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium','Фото ' + photoNum );
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',orientation,'Фото ' + photoNum );
         });
         jQuery('.add_600').click(function () {
             photoNum++;
@@ -407,7 +412,7 @@ function agi_googleImagesSearch() {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large','Фото ' + photoNum );
+                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',orientation,'Фото ' + photoNum );
             }
         });
         jQuery('.close_600').click(function () {
@@ -415,7 +420,7 @@ function agi_googleImagesSearch() {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large');
+                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',orientation);
                 jQuery('.agi_popup').toggle();
                 jQuery('.agi_window').toggle();
             }
@@ -426,7 +431,7 @@ function agi_googleImagesSearch() {
     }, "json");
 }
 
-function agi_googleImagesUpload(item, side, width, altI) {
+function agi_googleImagesUpload(item, side, width,orientation,altI) {
     var $ = jQuery;
 
     if(altI) var curAlt = altI;
@@ -438,7 +443,8 @@ function agi_googleImagesUpload(item, side, width, altI) {
         'referer': item.attr('referer'),
         'post_id': googleImagesPostId,
         'search': item.attr('q'),
-        'width': width
+        'width': width,
+        'orientation':orientation
     };
     $.post(ajaxurl, data2, function(response){
         var pathname = jQuery(location).attr('host');
@@ -467,7 +473,7 @@ function agi_googleThumbnailUpload(item) {
         var pathname = jQuery(location).attr('host');
         item.find('.load_img').text('Добавлено');
         jQuery('#_thumbnail_id').val(response[0]);
-        jQuery('#set-post-thumbnail').html('<img src="http://' + pathname + response[1] + '" />'); 
+        jQuery('#set-post-thumbnail').html('<img src="http://' + pathname + response[1] + '" />');
     },"json");
 
 }

@@ -203,6 +203,7 @@ function agi_google_images_upload()
     $post_id = $_POST['post_id'];
     $search = $_POST['search'];
     $thumb = $_POST['thumb'];
+    $orientation = $_POST['orientation'];
     
     try
     {
@@ -251,9 +252,9 @@ function agi_google_images_upload()
 
     if($thumb) {
         update_post_meta( $post_id, '_thumbnail_id', $attachment_id );
-        $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option('medium_size_w'),$upload_dir['path']);
+        $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option('medium_size_w'),$upload_dir['path'],$orientation,get_option($width . '_size_w'));
     }
-    if($width) $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path']);
+    if($width) $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path'],$orientation,get_option($width . '_size_w'));
 
     $pos = strpos($file_dir,'/wp-content');
     $file_dir = substr($file_dir, $pos); 
@@ -288,15 +289,25 @@ function listdir_by_date($path){
     return $list;
 }
 
-function getFileNameWithSize($find_file_name,$path){
+function getFileNameWithSize($find_file_name,$path,$orientation,$width){
     //$path = '/home/i/investk2/otdix-na-altai.ru/public_html/wp-content/uploads/2016/10';
     $names = listdir_by_date($path);
     $i = 0;
     $res = $find_file_name;
+    $cut_height = '';
     foreach ( $names as $name){
         //print_r($name . '<br/>');
         $s = strpos($name,$find_file_name);
-        if($s || $s === 0){ 
+        if($s || $s === 0){
+            $cut_height = str_replace($find_file_name . 'x', '' , $name );
+            if($orientation = 'horizontal' && $width > $cut_height ){ 
+                $res = $name;
+                break;
+            }
+            if($orientation = 'vaertical' && $width < $cut_height ){
+                $res = $name;
+                break;
+            }
             $res = $name;
             break;
         }
