@@ -11,8 +11,9 @@ var textAreaJs;
 var agi_width_thmb;
 var LastQuery;
 var content;
+
 function addHtml() {
-    jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertAfter('.wp-editor-tools');
+    jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertAfter('.wp-media-buttons');
     jQuery('<a class="thmb_btn">G<span>Автоминиатюра</span></a>').insertAfter('.img_btn');
     jQuery('<span class="after_img_btn"></span>').insertAfter('.thmb_btn');
     jQuery('.wp-admin').append('<div class="agi_popup"></div>');
@@ -79,8 +80,6 @@ function addHtml() {
         +'</select>'
     );
 }
-
-
 
 jQuery(document).ready(function() {
 

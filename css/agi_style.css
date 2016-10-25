@@ -54,6 +54,15 @@
     max-width: 99%;
     max-height: 99%;
 }
+a.img_btn{
+    clear: both;
+}
+.after_img_btn{
+    float: left;
+    display: inline-block;
+    height: 30px;
+    line-height: 40px;
+}
 a.img_btn,a.thmb_btn{
     display: inline-block;
     color: #e95f5f!important;
@@ -62,6 +71,7 @@ a.img_btn,a.thmb_btn{
     padding: 5px 10px;
     border-radius: 2px;
     cursor: pointer;
+    float: left;
 }
 a.img_btn span,a.thmb_btn span{
     font-size: 18px;
