@@ -252,7 +252,7 @@ function agi_google_images_upload()
 
     if($thumb) {
         update_post_meta( $post_id, '_thumbnail_id', $attachment_id );
-        $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option('medium_size_w'),$upload_dir['path'],$orientation,get_option($width . '_size_w'));
+        $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option('medium_size_w'),$upload_dir['path'],$orientation,get_option('medium_size_w'));
     }
     if($width) $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path'],$orientation,get_option($width . '_size_w'));
 
@@ -296,20 +296,22 @@ function getFileNameWithSize($find_file_name,$path,$orientation,$width){
     $res = $find_file_name;
     $cut_height = '';
     foreach ( $names as $name){
-        //print_r($name . '<br/>');
         $s = strpos($name,$find_file_name);
         if($s || $s === 0){
             $cut_height = str_replace($find_file_name . 'x', '' , $name );
-            if($orientation = 'horizontal' && $width > $cut_height ){ 
+            if($orientation == 'horizontal' && $width > $cut_height ){
                 $res = $name;
                 break;
             }
-            if($orientation = 'vaertical' && $width < $cut_height ){
+            else if($orientation == 'vertical' && $width < $cut_height ){
                 $res = $name;
                 break;
             }
-            $res = $name;
-            break;
+            else if($orientation == 'square' && $width == $cut_height ){
+                $res = $name;
+                break;
+            }
+            else continue;
         }
         if($i>10) break;
         $i++;

@@ -140,7 +140,7 @@ jQuery(document).ready(function() {
     function OnSelect() {
         googleImagesPage = 0;
         var stxt = ShowSelection();
-        if( 2 < stxt.length && stxt.length < 100){
+        if( 2 < stxt.length && stxt.length < 50){
             onSelected = stxt;
             jQuery('.after_img_btn').html(onSelected);
         }
@@ -325,11 +325,11 @@ function agi_googleImagesSearch() {
             }
 
             var orientation;
-            if(items[i].w > items[i].h) orientation = 'horizontal';
-            else if(items[i].w < items[i].h) orientation = 'vertical';
+            if(Number(items[i].w) > Number(items[i].h)) orientation = 'horizontal';
+            else if(Number(items[i].w) < Number(items[i].h)) orientation = 'vertical';
             else orientation = 'square';
 
-            var html = '<div class="founded_img" mark=""><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
+            var html = '<div class="founded_img" mark="" orient="'+orientation+'"><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
                 + '" url="' + items[i].imgurl + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
@@ -367,7 +367,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             //rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleThumbnailUpload(rem.find('.agi_img_res'));
+            agi_googleThumbnailUpload(rem.find('.agi_img_res'),rem.attr('orient'));
             setTimeout(function(){
                 jQuery('.agi_popup').toggle();
                 jQuery('.agi_window').toggle();
@@ -380,7 +380,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',orientation);
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',rem.attr('orient'));
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -388,7 +388,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',orientation);
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',rem.attr('orient'));
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -397,14 +397,14 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',orientation,'Фото ' + photoNum );
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',rem.attr('orient'),'Фото ' + photoNum );
         });
         jQuery('.r_300').click(function () {
             photoNum++;
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',orientation,'Фото ' + photoNum );
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',rem.attr('orient'),'Фото ' + photoNum );
         });
         jQuery('.add_600').click(function () {
             photoNum++;
@@ -412,7 +412,7 @@ function agi_googleImagesSearch() {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',orientation,'Фото ' + photoNum );
+                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',rem.attr('orient'),'Фото ' + photoNum );
             }
         });
         jQuery('.close_600').click(function () {
@@ -420,7 +420,7 @@ function agi_googleImagesSearch() {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',orientation);
+                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',rem.attr('orient'));
                 jQuery('.agi_popup').toggle();
                 jQuery('.agi_window').toggle();
             }
@@ -458,7 +458,7 @@ function agi_googleImagesUpload(item, side, width,orientation,altI) {
 
 }
 
-function agi_googleThumbnailUpload(item) {
+function agi_googleThumbnailUpload(item,orientation) {
     var $ = jQuery;
 
     var data_thmb = {
@@ -467,7 +467,8 @@ function agi_googleThumbnailUpload(item) {
         'referer': item.attr('referer'),
         'post_id': googleImagesPostId,
         'search': item.attr('q'),
-        'thumb':true
+        'thumb':true,
+        'orientation':orientation
     };
     $.post(ajaxurl, data_thmb, function(response){
         var pathname = jQuery(location).attr('host');
