@@ -210,7 +210,7 @@ jQuery(document).ready(function() {
                 selection.removeAllRanges();
             }
             if(jQuery('.agi_preview').css('display') == 'block'){ 
-                jQuery('.agi_preview').hide();
+                jQuery('.agi_preview').html('').hide();
             }else {
                 jQuery('.agi_popup').hide();
                 jQuery('.agi_window').hide();
