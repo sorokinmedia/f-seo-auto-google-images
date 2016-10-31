@@ -6,24 +6,3 @@ Requires at least: 3.0
 Tested up to: 4.0
 
 Плагин автоподгрузки картинок из Google Images, FAQ
-
-== Description ==
-This plagin link with Google and parse capture from Google Images. After that, it downloads images into your post.
-
-
-Organization post views map with a mark on phisical adress (using Yandex Map).
-
-**Localisation**
-
-Current translations are:
-
-* Russian by Yuriy Petrovskiy
-
-
-== Installation ==
-1.	Extract the zip file and just drop the contents in the wp-content/plugins/ directory of your WordPress installation and then activate the Plugin from Plugins page.
-2.	View the Q&A Forum page under settings in the wordpress admin to choose settings
-3.	Create a normal wordpress page with the  shortcode [organization_form width=\\\'x\\\' bordercolor=\\\'x\\\' style=\\\'x\\\']organizationform title[/organization_form] to insert the organization form where each of the parameters can be omitted (the style parameter is any addition css styles to add to the form)
-4.	use the [list_organization] short code to list questions which can be filtered by category or user. Use the parameter author=’%’ to display the current user.
-5.	If you wish the users to be logged in to ask a question select the appropriate option on the options page. It is recommended you use another plugin to manage your users (such as login with ajax and customise your community). You will also need to ensure that anyone can register in the general settings for wordpress.
-6.	To customise the look of your forum create a single-question.php and quser.php if you are using user profiles file in your themes folder. This can be created in the same way as the single.php file (you could copy this if your license allows). In this forum the questions are actually posts and the answers comments so you should change the output accordingly, eg if you comment form as the text submit comment change it to submit answer.
