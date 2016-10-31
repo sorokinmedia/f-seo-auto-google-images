@@ -280,6 +280,7 @@ jQuery(document).ready(function() {
 
 });
 
+//поиск и вывод превью картинок
 function agi_googleImagesSearch() {
     $doc = document.getElementsByClassName('agi_window')[0].firstChild;
 
@@ -415,7 +416,7 @@ function agi_googleImagesSearch() {
             }
         });
         jQuery('.close_600').click(function () {
-            if(jQuery(this).attr('deny') == click) {
+            if(jQuery(this).attr('deny') == 'click') {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
