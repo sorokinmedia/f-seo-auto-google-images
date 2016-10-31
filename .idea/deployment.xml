@@ -23,6 +23,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="ssuperm">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/man-up.ru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
     <option name="myAutoUpload" value="ON_EXPLICIT_SAVE" />
   </component>

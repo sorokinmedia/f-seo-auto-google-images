@@ -299,15 +299,15 @@ function getFileNameWithSize($find_file_name,$path,$orientation,$width){
         $s = strpos($name,$find_file_name);
         if($s || $s === 0){
             $cut_height = str_replace($find_file_name . 'x', '' , $name );
-            if($orientation == 'horizontal' && $width > $cut_height ){
+            if($orientation == 'horizontal' && $width > (int)$cut_height ){
                 $res = $name;
                 break;
             }
-            else if($orientation == 'vertical' && $width < $cut_height ){
+            else if($orientation == 'vertical' && $width < (int)$cut_height ){
                 $res = $name;
                 break;
             }
-            else if($orientation == 'square' && $width == $cut_height ){
+            else if($orientation == 'square' && $width == (int)$cut_height ){
                 $res = $name;
                 break;
             }
