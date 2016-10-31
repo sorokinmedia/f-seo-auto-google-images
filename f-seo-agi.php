@@ -16,8 +16,6 @@ include(dirname(__FILE__).'/AgiGoogleImage.php');
 function fseo_agi_init(){
     wp_enqueue_style('agi_style', plugins_url('css/agi_style.css', __FILE__), null, FSEO_AGI_CURRENT_VERSION, 'all');
     wp_enqueue_script('agi_script', plugins_url( 'js/agi_script.js', __FILE__ ), false, FSEO_AGI_CURRENT_VERSION);
-    wp_enqueue_script('agi_script', plugins_url( 'js/agi_script_thmb.js', __FILE__ ), false, FSEO_AGI_CURRENT_VERSION);
-    //echo '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
 }
 add_action( 'admin_init', 'fseo_agi_init' );
 
@@ -221,8 +219,6 @@ function agi_google_images_upload()
         $filename = _getFileNameAgi($search).date("_dHis").".jpg";
     }
 
-    //echo 123;//$image->mime . '   ' . $image->filename . '    ' . $image->files . '    ' . $image->width;
-
     $upload_dir = wp_upload_dir();
 
     $image->compress('');
@@ -299,15 +295,15 @@ function getFileNameWithSize($find_file_name,$path,$orientation,$width){
         $s = strpos($name,$find_file_name);
         if($s || $s === 0){
             $cut_height = str_replace($find_file_name . 'x', '' , $name );
-            if($orientation == 'horizontal' && $width > (int)$cut_height ){
+            if($orientation == 'horizontal' && (int)$width > (int)$cut_height ){
                 $res = $name;
                 break;
             }
-            else if($orientation == 'vertical' && $width < (int)$cut_height ){
+            else if($orientation == 'vertical' && (int)$width < (int)$cut_height ){
                 $res = $name;
-                break;
+                break;t
             }
-            else if($orientation == 'square' && $width == (int)$cut_height ){
+            else if($orientation == 'square' && (int)$width == (int)$cut_height ){
                 $res = $name;
                 break;
             }
