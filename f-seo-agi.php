@@ -301,7 +301,7 @@ function getFileNameWithSize($find_file_name,$path,$orientation,$width){
             }
             else if($orientation == 'vertical' && (int)$width < (int)$cut_height ){
                 $res = $name;
-                break;t
+                break;
             }
             else if($orientation == 'square' && (int)$width == (int)$cut_height ){
                 $res = $name;
