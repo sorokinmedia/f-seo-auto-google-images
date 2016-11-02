@@ -166,8 +166,10 @@ function agi_google_images_search()
             'User-Agent' => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
         ),
     ));
+
     preg_match_all("/<div class=\"rg_di.*\".*>.*<a href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
     $items = array();
+
     foreach ($matches[1] as $number => $match)
     {
         if (count($items) >= 14) break;

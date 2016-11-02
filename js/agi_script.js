@@ -25,7 +25,7 @@ function addHtml() {
         '<a class="srch_btn">Find</a>' +
         '</div></div>');
 
-    jQuery('.agi_window').append('<div class="agi_results"></div><span class="pages prev_p"></span><span class="numpage"></span><span class="pages next_p">Next→</span><span class="popap_cross"></span>');
+    jQuery('.agi_window').append('<div class="agi_results"></div><span class="agi_pages prev_p"></span><span class="numpage"></span><span class="agi_pages next_p">Next→</span><span class="popap_cross"></span>');
     jQuery('.afi_win_left').append('<div class="agi_param"></div>');
 
     jQuery('.btns_instruct').append('"+"  -  добавить картинку и сотаться на странице попап (если нажать на кнопку без плюса, окно закоется)' +
