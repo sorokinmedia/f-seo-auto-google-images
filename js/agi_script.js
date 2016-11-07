@@ -286,7 +286,7 @@ function agi_googleImagesSearch() {
 
     var $ = jQuery;
 
-    var q = jQuery('.agi_srch_txt').val();
+    var q = jQuery('.agi_srch_txt').val().replace('"','');
 
     var data = {
         'action': 'agi_google_images_search',
@@ -436,6 +436,7 @@ function agi_googleImagesUpload(item, side, width,orientation,altI) {
 
     if(altI) var curAlt = altI;
     else var curAlt = alt;
+    alert(item.attr('q'));
 
     var data2 = {
         'action': 'agi_google_images_upload',

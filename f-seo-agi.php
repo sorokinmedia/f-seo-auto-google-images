@@ -347,6 +347,7 @@ function _getFileNameAgi($search)
         '?' => "_",   '!' => "_",   "'" => '',
         ':' => "_",
     );
+    $search = str_replace('"','',$search);
     $search = strtr(trim($search), $converter);
     $upload_dir = wp_upload_dir();
 
