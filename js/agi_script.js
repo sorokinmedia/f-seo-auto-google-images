@@ -436,7 +436,6 @@ function agi_googleImagesUpload(item, side, width,orientation,altI) {
 
     if(altI) var curAlt = altI;
     else var curAlt = alt;
-    alert(item.attr('q'));
 
     var data2 = {
         'action': 'agi_google_images_upload',
