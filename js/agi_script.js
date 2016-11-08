@@ -83,10 +83,7 @@ function addHtml() {
 
 jQuery(document).ready(function() {
 
-    //content = jQuery("#content").text();
-
-    //if(location.toString().indexOf('post=') == -1) jQuery("form#post").submit();
-
+    //Подготовка необходимых объектов
     if (jQuery("h1:first").text() == 'Изменить рубрику') {
         googleImagesPostId = jQuery("[name = 'tag_ID']").val();
         jQuery('.thmb_btn').hide();
@@ -99,7 +96,9 @@ jQuery(document).ready(function() {
         textArea = jQuery("#descr_descrbottom");
         textAreaJs = document.getElementById('descr_descrbottom');
     });
-    if (jQuery("h1:first").text() == 'Редактировать запись Добавить новую') {
+    if (jQuery("h1:first").text() == 'Редактировать запись Добавить новую' ||
+        jQuery("h1:first").text() == 'Изменить Добавить вопрос'
+    ) {
         textArea = jQuery("#content");
         textAreaJs = document.getElementById('content');
     }
@@ -109,11 +108,12 @@ jQuery(document).ready(function() {
     // Добавим  html
     addHtml();
 
+    // Скроем в категориях Добавление миниатюры
     if (jQuery("h1:first").text() == 'Изменить рубрику') {
         jQuery('.thmb_btn').hide(); 
     }
 
-    // Обработаем клик
+    // Обработаем клики
     jQuery('.img_btn').click(function () {
         jQuery('.agi_window').attr('win','img');
         AgiWinOpen();
@@ -271,13 +271,6 @@ jQuery(document).ready(function() {
 
     // Задаем ширину из настроек
     setOptionWidth();
-
-
-
-    /*jQuery(function () {
-        //jQuery('[data-toggle="tooltip"]').tooltip();
-    })*/
-
 });
 
 //поиск и вывод превью картинок
