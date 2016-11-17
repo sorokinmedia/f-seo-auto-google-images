@@ -257,12 +257,16 @@ function agi_google_images_upload()
     $pos = strpos($file_dir,'/wp-content');
     $file_dir = substr($file_dir, $pos); 
     $file_dir = str_replace('/public_html','',$file_dir );
-    if($thumb) {
+
+    if (strpos($file_dir,'WP_Error')) echo 'WP_Error';
+
+    else if($thumb) {
         $result = array();
         $result[0] = $attachment_id;
         $result[1] = $file_dir;
         echo json_encode($result);
     }
+
     else echo $file_dir;
 
     die();

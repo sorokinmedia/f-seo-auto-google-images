@@ -440,13 +440,16 @@ function agi_googleImagesUpload(item, side, width,orientation,altI) {
         'orientation':orientation
     };
     $.post(ajaxurl, data2, function(response){
-        var pathname = jQuery(location).attr('host');
-        //alert('Добавлено! ' + response);
-        item.find('.load_img').text('Добавлено');
-        var img = '<img src="' + 'http://' + pathname + response + '" class="' + side
-            + '" alt="' + curAlt + '"/>';
-        InsertByCaretPos(carPos,img);
-        carPos = carPos+img.length;
+        if(response === 'WP_Error') alert('Картинка недоступна');
+        else {
+            var pathname = jQuery(location).attr('host');
+            //alert('Добавлено! ' + response);
+            item.find('.load_img').text('Добавлено');
+            var img = '<img src="' + 'http://' + pathname + response + '" class="' + side
+                + '" alt="' + curAlt + '"/>';
+            InsertByCaretPos(carPos, img);
+            carPos = carPos + img.length;
+        }
     });
 
 }
@@ -464,10 +467,13 @@ function agi_googleThumbnailUpload(item,orientation) {
         'orientation':orientation
     };
     $.post(ajaxurl, data_thmb, function(response){
-        var pathname = jQuery(location).attr('host');
-        item.find('.load_img').text('Добавлено');
-        jQuery('#_thumbnail_id').val(response[0]);
-        jQuery('#set-post-thumbnail').html('<img src="http://' + pathname + response[1] + '" />');
+        if(response === 'WP_Error') alert('Картинка недоступна');
+        else {
+            var pathname = jQuery(location).attr('host');
+            item.find('.load_img').text('Добавлено');
+            jQuery('#_thumbnail_id').val(response[0]);
+            jQuery('#set-post-thumbnail').html('<img src="http://' + pathname + response[1] + '" />');
+        }
     },"json");
 
 }
