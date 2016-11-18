@@ -326,6 +326,10 @@ function agi_googleImagesSearch() {
                 + '" url="' + items[i].imgurl + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
+                + '<div class="circle_img"><form>'
+                + '<label>Cirlce</label>'
+                +'<input type="checkbox" id="circle_img" name="circle_img"/>'
+                +'</form></div>';
             var html_img = '<div><span class="agi_img_add l_300_close" data-toggle="tooltip" title="Добавить слева (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">←'
                     +agi_width+'</span>'
                 + '<span class="agi_img_add r_300_close" data-toggle="tooltip" title="Добавить справа (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">'
@@ -442,11 +446,13 @@ function agi_googleImagesUpload(item, side, width,orientation,altI) {
     $.post(ajaxurl, data2, function(response){
         if(response === 'WP_Error') alert('Картинка недоступна');
         else {
+            var circle = '';
             var pathname = jQuery(location).attr('host');
             //alert('Добавлено! ' + response);
             item.find('.load_img').text('Добавлено');
+            if(item.parent().find('#circle_img').prop("checked")) circle = ' width="200" height="200" style="border-radius: 100%"';
             var img = '<img src="' + 'http://' + pathname + response + '" class="' + side
-                + '" alt="' + curAlt + '"/>';
+                + '"'+ circle +' alt="' + curAlt + '"/>';
             InsertByCaretPos(carPos, img);
             carPos = carPos + img.length;
         }
@@ -489,7 +495,7 @@ function InsertByCaretPos(p,value) {
     }
     else{
         ta.trigger('focus');
-        range = document.selection.createRange(); 
+        range = document.selection.createRange();
         range.text = value;
     }
 }

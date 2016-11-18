@@ -285,3 +285,10 @@ a.thmb_btn span,a.thmb_btn{
 label.d_block{
     margin-bottom: 5px;
 }
+.circle_img{
+    float: right;
+    margin-right: 10px;
+}
+.circle_img label{
+    margin-right: 10px;
+}
