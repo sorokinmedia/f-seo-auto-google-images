@@ -78,6 +78,9 @@ function addHtml() {
             +'<option value="white">Белые</option>'
             +'<option value="yellow">Желтые</option>'
         +'</select>'
+
+        +'<label>Только квадратные    </label>'
+        +'<input type="checkbox" id="circle_only" name="circle_only"/>'
     );
 }
 
@@ -281,6 +284,10 @@ function agi_googleImagesSearch() {
 
     var q = jQuery('.agi_srch_txt').val().replace('"','');
 
+    var search_orient = '';
+
+    if(jQuery('.agi_param').find('#circle_only').prop('checked')) search_orient = 'square';
+
     var data = {
         'action': 'agi_google_images_search',
         'q': q,
@@ -289,7 +296,8 @@ function agi_googleImagesSearch() {
         'type': jQuery('.agi_select_type').val(),//$('#google-images-header .search-type').val(),
         'period': jQuery('.agi_select_period').val(),//$('#google-images-header .search-period').val(),
         'safety': '',//$('#google-images-header .search-safety').val(),
-        'page': googleImagesPage
+        'page': googleImagesPage,
+        'search_orient': search_orient
 
     };
 
@@ -336,10 +344,7 @@ function agi_googleImagesSearch() {
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
                 +  circle;
-                /*+ '<div class="circle_img"><form>'
-                + '<label>Cirlce</label>'
-                +'<input type="checkbox" id="circle_img" name="circle_img"/>'
-                +'</form></div>';*/
+
             var html_img = '<div><span class="agi_img_add l_300_close" data-toggle="tooltip" title="Добавить слева (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">←'
                     +agi_width+'</span>'
                 + '<span class="agi_img_add r_300_close" data-toggle="tooltip" title="Добавить справа (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">'
@@ -353,9 +358,13 @@ function agi_googleImagesSearch() {
                 + '<span class="agi_img_add add_600 yellow_btn" ' + ' deny="' + deny_click + '" '+onclick+' data-toggle="tooltip" title="Добавить в центр (w:число) и продолжить" data-delay="{'+'"show": 100, "hide": 1000}">+'
                     +agi_width_big+'</span>'
                 +'</div></div>';
+
             var html_thmb = '<div class="create_thmb_btn">Make the thumbnail</div></div>';
-            if(jQuery('.agi_window').attr('win') == 'img' && Number(items[i].w) > Number(agi_width)) jQuery('.agi_results').append(html + html_img);
-            if(jQuery('.agi_window').attr('win') == 'thmb' && Number(items[i].w) > Number(agi_width_thmb)) jQuery('.agi_results').append(html + html_thmb);
+
+            if(jQuery('.agi_window').attr('win') == 'img'
+                && Number(items[i].w) > Number(agi_width)) jQuery('.agi_results').append(html + html_img);
+            if(jQuery('.agi_window').attr('win') == 'thmb'
+                && Number(items[i].w) > Number(agi_width_thmb)) jQuery('.agi_results').append(html + html_thmb);
         }
 
         jQuery('.agi_img_res').click(function () {

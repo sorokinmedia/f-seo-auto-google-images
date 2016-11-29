@@ -105,6 +105,7 @@ function agi_google_images_search()
         "q" => urlencode($_POST['q']),
         "start" => $_POST['page']*20,
         "sa" => "X",
+        "search_orient" => $_POST['search_orient']
     );
     $tbs = "";
     switch ($_POST['size'])
@@ -149,7 +150,7 @@ function agi_google_images_search()
         $tbs .= ",qdr:".$_POST['period'];
     }
 
-    //$tbs .= ",iar:w";
+    if($_POST['search_orient'] == 'square') $tbs .= ",iar:s";
 
     $tbs = trim($tbs, ", ");
     if (!empty($tbs)) $params['tbs'] = $tbs;
