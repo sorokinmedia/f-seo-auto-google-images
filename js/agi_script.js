@@ -322,14 +322,24 @@ function agi_googleImagesSearch() {
             else if(Number(items[i].w) < Number(items[i].h)) orientation = 'vertical';
             else orientation = 'square';
 
+            var circle;
+            if(orientation === 'square') {
+                circle = '<div class="circle_img"><form>'
+                    + '<label>Cirlce</label>'
+                    +'<input type="checkbox" id="circle_img" name="circle_img"/>'
+                    +'</form></div>';
+            }
+            else circle = '';
+
             var html = '<div class="founded_img" mark="" orient="'+orientation+'"><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
                 + '" url="' + items[i].imgurl + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
-                + '<div class="circle_img"><form>'
+                +  circle;
+                /*+ '<div class="circle_img"><form>'
                 + '<label>Cirlce</label>'
                 +'<input type="checkbox" id="circle_img" name="circle_img"/>'
-                +'</form></div>';
+                +'</form></div>';*/
             var html_img = '<div><span class="agi_img_add l_300_close" data-toggle="tooltip" title="Добавить слева (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">←'
                     +agi_width+'</span>'
                 + '<span class="agi_img_add r_300_close" data-toggle="tooltip" title="Добавить справа (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">'
