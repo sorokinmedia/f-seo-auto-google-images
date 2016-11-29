@@ -330,6 +330,8 @@ function agi_googleImagesSearch() {
             else if(Number(items[i].w) < Number(items[i].h)) orientation = 'vertical';
             else orientation = 'square';
 
+            var propor = items[i].w / items[i].h;//пропорциональность картинки - ширина на длину
+
             var circle;
             if(orientation === 'square') {
                 circle = '<div class="circle_img"><form>'
@@ -339,7 +341,8 @@ function agi_googleImagesSearch() {
             }
             else circle = '';
 
-            var html = '<div class="founded_img" mark="" orient="'+orientation+'"><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
+            var html = '<div class="founded_img" mark="" orient="'
+                +orientation+'" proportion="'+propor+'"><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
                 + '" url="' + items[i].imgurl + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
@@ -396,7 +399,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',rem.attr('orient'));
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',rem.attr('orient'),0,rem.attr('proportion'));
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -404,7 +407,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',rem.attr('orient'));
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',rem.attr('orient'),0,rem.attr('proportion'));
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -413,14 +416,14 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',rem.attr('orient'),'Фото ' + photoNum );
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',rem.attr('orient'),'Фото ' + photoNum ,rem.attr('proportion'));
         });
         jQuery('.r_300').click(function () {
             photoNum++;
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',rem.attr('orient'),'Фото ' + photoNum );
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',rem.attr('orient'),'Фото ' + photoNum ,rem.attr('proportion'));
         });
         jQuery('.add_600').click(function () {
             photoNum++;
@@ -428,7 +431,7 @@ function agi_googleImagesSearch() {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',rem.attr('orient'),'Фото ' + photoNum );
+                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',rem.attr('orient'),'Фото ' + photoNum ,rem.attr('proportion'));
             }
         });
         jQuery('.close_600').click(function () {
@@ -436,7 +439,7 @@ function agi_googleImagesSearch() {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',rem.attr('orient'));
+                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',rem.attr('orient'),0,rem.attr('proportion'));
                 jQuery('.agi_popup').toggle();
                 jQuery('.agi_window').toggle();
             }
@@ -447,7 +450,7 @@ function agi_googleImagesSearch() {
     }, "json");
 }
 
-function agi_googleImagesUpload(item, side, width,orientation,altI) {
+function agi_googleImagesUpload(item, side, width,orientation,altI,proportion) {
     var $ = jQuery;
 
     if(altI) var curAlt = altI;
@@ -460,9 +463,12 @@ function agi_googleImagesUpload(item, side, width,orientation,altI) {
         'post_id': googleImagesPostId,
         'search': item.attr('q'),
         'width': width,
-        'orientation':orientation
+        'orientation':orientation,
+        'proportion': proportion
     };
+    alert(proportion);
     $.post(ajaxurl, data2, function(response){
+        alert(response);
         if(response === 'WP_Error') alert('Картинка недоступна');
         else {
             var circle = '';

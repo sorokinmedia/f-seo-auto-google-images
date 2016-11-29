@@ -205,6 +205,7 @@ function agi_google_images_upload()
     $search = $_POST['search'];
     $thumb = $_POST['thumb'];
     $orientation = $_POST['orientation'];
+    $propotion = $_POST['proportion'];
     
     try
     {
@@ -251,9 +252,9 @@ function agi_google_images_upload()
 
     if($thumb) {
         update_post_meta( $post_id, '_thumbnail_id', $attachment_id );
-        $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option('medium_size_w'),$upload_dir['path'],$orientation,get_option('medium_size_w'));
+        $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option('medium_size_w'),$upload_dir['path'],$orientation,get_option('medium_size_w'),$propotion)[0];
     }
-    if($width) $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path'],$orientation,get_option($width . '_size_w'));
+    if($width) $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path'],$orientation,get_option($width . '_size_w'),$propotion)[0];
 
     $pos = strpos($file_dir,'/wp-content');
     $file_dir = substr($file_dir, $pos); 
@@ -292,34 +293,50 @@ function listdir_by_date($path){
     return $list;
 }
 
-function getFileNameWithSize($find_file_name,$path,$orientation,$width){
+function getFileNameWithSize($find_file_name,$path,$orientation,$width,$proportion){
     //$path = '/home/i/investk2/otdix-na-altai.ru/public_html/wp-content/uploads/2016/10';
     $names = listdir_by_date($path);
     $i = 0;
     $res = $find_file_name;
     $cut_height = '';
+    $ar = array();
     foreach ( $names as $name){
         $s = strpos($name,$find_file_name);
         if($s || $s === 0){
             $cut_height = str_replace($find_file_name . 'x', '' , $name );
             if($orientation == 'horizontal' && (int)$width > (int)$cut_height ){
-                $res = $name;
-                break;
+                $ar[] = array($name,(int)$width/(int)$cut_height);
+                /*$res = $name;
+                break;*/
             }
             else if($orientation == 'vertical' && (int)$width < (int)$cut_height ){
-                $res = $name;
-                break;
+                $ar[] = array($name,(int)$width/(int)$cut_height);
+                /*$res = $name;
+                break;*/
             }
             else if($orientation == 'square' && (int)$width == (int)$cut_height ){
-                $res = $name;
-                break;
+                $ar[] = array($name,(int)$width/(int)$cut_height);
+                /*$res = $name;
+                break;*/
             }
             else continue;
         }
         if($i>10) break;
         $i++;
     }
-    return $res;
+
+    return findNearestProportion($ar,$proportion);
+}
+
+//ищет подходящую по пропорциям картинку
+function findNearestProportion($ar,$proportion){
+    $max = $ar[0];
+    for($i=1; $i<count($ar); $i++){
+       if(abs($ar[$i][1] - $proportion)<abs($max[1]-$proportion)){
+           $max = $ar[$i];
+       }
+    }
+    return $max;
 }
 
 function _getFileNameAgi($search)
