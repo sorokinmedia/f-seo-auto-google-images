@@ -473,9 +473,9 @@ function agi_googleImagesUpload(item, side, width,orientation,altI,proportion) {
             var pathname = jQuery(location).attr('host');
             //alert('Добавлено! ' + response);
             item.find('.load_img').text('Добавлено');
-            if(item.parent().find('#circle_img').prop("checked")) circle = ' width="200" height="200" style="border-radius: 100%"';
+            if(item.parent().find('#circle_img').prop("checked")) circle = ' img_rounded';
             var img = '<img src="' + 'http://' + pathname + response + '" class="' + side
-                + '"'+ circle +' alt="' + curAlt + '"/>';
+                + circle  + '"' +' alt="' + curAlt + '"/>';
             InsertByCaretPos(carPos, img);
             carPos = carPos + img.length;
         }

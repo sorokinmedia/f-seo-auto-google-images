@@ -3,11 +3,11 @@
 Plugin Name: F-Seo Auto Google Images
 Description: Плагин автоматической подгрузки картинок из Google Images в текстовый редактор WordPress, FAQ
 Author: F-Seo
-Version: 2.1
+Version: 2.2
 Author URI: http://f-seo.ru/
 */
 
-define ( 'FSEO_AGI_CURRENT_VERSION',  '2.1' );
+define ( 'FSEO_AGI_CURRENT_VERSION',  '2.2' );
 
 include(dirname(__FILE__).'/AgiGoogleImage.php');
 
