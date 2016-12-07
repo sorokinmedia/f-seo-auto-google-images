@@ -99,7 +99,7 @@ jQuery(document).ready(function() {
         textArea = jQuery("#descr_descrbottom");
         textAreaJs = document.getElementById('descr_descrbottom');
     });
-    if (jQuery("h1:first").text() == 'Редактировать запись Добавить новую' ||
+    if (jQuery("h1:first").text() == 'Редактировать запись' ||
         jQuery("h1:first").text() == 'Изменить Добавить вопрос'
     ) {
         textArea = jQuery("#content");
