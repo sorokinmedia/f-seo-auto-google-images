@@ -87,7 +87,8 @@ function addHtml() {
 jQuery(document).ready(function() {
 
     //Подготовка необходимых объектов
-    if (jQuery("h1:first").text() == 'Изменить рубрику') {
+    var url = jQuery(location).attr('href');
+    if (url.indexOf('term.php?taxonomy=category') + 1) {
         googleImagesPostId = jQuery("[name = 'tag_ID']").val();
         jQuery('.thmb_btn').hide();
     }
@@ -99,9 +100,9 @@ jQuery(document).ready(function() {
         textArea = jQuery("#descr_descrbottom");
         textAreaJs = document.getElementById('descr_descrbottom');
     });
-    if (jQuery("h1:first").text() == 'Редактировать запись' ||
-        jQuery("h1:first").text() == 'Изменить Добавить вопрос'
-    ) {
+
+    if ((url.indexOf('post.php') + 1 && url.indexOf('action=edit') + 1) || (url.indexOf('post-new.php') + 1))
+    {
         textArea = jQuery("#content");
         textAreaJs = document.getElementById('content');
     }
