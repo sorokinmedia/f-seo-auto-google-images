@@ -51,10 +51,17 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="olawyer">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/sdengami.ru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="prbere (project level)">
         <serverdata>
           <mappings>
-            <mapping deploy="/varikoz.guru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/101urist.com/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

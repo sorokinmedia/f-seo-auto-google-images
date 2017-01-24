@@ -475,7 +475,7 @@ function agi_googleImagesUpload(item, side, width,orientation,altI,proportion) {
             //alert('Добавлено! ' + response);
             item.find('.load_img').text('Добавлено');
             if(item.parent().find('#circle_img').prop("checked")) circle = ' img_rounded';
-            var img = '<img src="' + 'http://' + pathname + response + '" class="' + side
+            var img = '<img src="' + '//' + pathname + response + '" class="' + side
                 + circle  + '"' +' alt="' + curAlt + '"/>';
             InsertByCaretPos(carPos, img);
             carPos = carPos + img.length;
@@ -502,7 +502,7 @@ function agi_googleThumbnailUpload(item,orientation) {
             var pathname = jQuery(location).attr('host');
             item.find('.load_img').text('Добавлено');
             jQuery('#_thumbnail_id').val(response[0]);
-            jQuery('#set-post-thumbnail').html('<img src="http://' + pathname + response[1] + '" />');
+            jQuery('#set-post-thumbnail').html('<img src="//' + pathname + response[1] + '" />');
         }
     },"json");
 
