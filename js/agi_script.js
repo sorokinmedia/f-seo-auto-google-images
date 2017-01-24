@@ -92,13 +92,13 @@ jQuery(document).ready(function() {
         googleImagesPostId = jQuery("[name = 'tag_ID']").val();
         jQuery('.thmb_btn').hide();
     }
-    jQuery("#descr_descrtop").focus(function () {
-        textArea = jQuery("#descr_descrtop");
-        textAreaJs = document.getElementById('descr_descrtop');
+    jQuery("#cat_top_description").focus(function () {
+        textArea = jQuery("#cat_top_description");
+        textAreaJs = document.getElementById('cat_top_description');
     });
-    jQuery("#descr_descrbottom").focus(function () {
-        textArea = jQuery("#descr_descrbottom");
-        textAreaJs = document.getElementById('descr_descrbottom');
+    jQuery("#cat_bottom_description").focus(function () {
+        textArea = jQuery("#cat_bottom_description");
+        textAreaJs = document.getElementById('cat_bottom_description');
     });
 
     if ((url.indexOf('post.php') + 1 && url.indexOf('action=edit') + 1) || (url.indexOf('post-new.php') + 1))
@@ -133,10 +133,10 @@ jQuery(document).ready(function() {
     jQuery("#content").select(function () {
         OnSelect();
     });
-    jQuery("#descr_descrtop").select(function () {
+    jQuery("#cat_top_description").select(function () {
         OnSelect();
     });
-    jQuery("#descr_descrbottom").select(function () {
+    jQuery("#cat_bottom_description").select(function () {
         OnSelect();
     });
 
@@ -188,10 +188,10 @@ jQuery(document).ready(function() {
     jQuery("#content").focusout(function () {
         carPos = jQuery(this)[0].selectionStart;
     });
-    jQuery("#descr_descrtop").focusout(function () {
+    jQuery("#cat_top_description").focusout(function () {
         carPos = jQuery(this)[0].selectionStart;
     });
-    jQuery("#descr_descrbottom").focusout(function () {
+    jQuery("#cat_bottom_description").focusout(function () {
         carPos = jQuery(this)[0].selectionStart;
     });
 
