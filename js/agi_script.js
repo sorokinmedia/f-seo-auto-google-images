@@ -86,195 +86,191 @@ function addHtml() {
 
 jQuery(document).ready(function() {
 
-    //Подготовка необходимых объектов
-    var url = jQuery(location).attr('href');
-    if (url.indexOf('term.php?taxonomy=category') + 1) {
-        googleImagesPostId = jQuery("[name = 'tag_ID']").val();
-        jQuery('.thmb_btn').hide();
-    }
-    jQuery("#cat_top_description").focus(function () {
-        textArea = jQuery("#cat_top_description");
-        textAreaJs = document.getElementById('cat_top_description');
-    });
-    jQuery("#cat_bottom_description").focus(function () {
-        textArea = jQuery("#cat_bottom_description");
-        textAreaJs = document.getElementById('cat_bottom_description');
-    });
-
-    if ((url.indexOf('post.php') + 1 && url.indexOf('action=edit') + 1) || (url.indexOf('post-new.php') + 1))
-    {
-        textArea = jQuery("#content");
-        textAreaJs = document.getElementById('content');
-    }
-
-
-
-    // Добавим  html
-    addHtml();
-
-    // Скроем в категориях Добавление миниатюры
-    if (jQuery("h1:first").text() == 'Изменить рубрику') {
-        jQuery('.thmb_btn').hide(); 
-    }
-
-    // Обработаем клики
-    jQuery('.img_btn').click(function () {
-        jQuery('.agi_window').attr('win','img');
-        AgiWinOpen();
-    });
-
-    jQuery('.thmb_btn').click(function () {
-        //if(content!=jQuery("#content").val()) jQuery("form#post").submit();
-        jQuery('.agi_window').attr('win','thmb');
-        AgiWinOpen();
-    });
-
-    //ОБработаем выделение текста
-    jQuery("#content").select(function () {
-        OnSelect();
-    });
-    jQuery("#cat_top_description").select(function () {
-        OnSelect();
-    });
-    jQuery("#cat_bottom_description").select(function () {
-        OnSelect();
-    });
-
-    function OnSelect() {
-        googleImagesPage = 0;
-        var stxt = ShowSelection();
-        if( 2 < stxt.length && stxt.length < 50){
-            onSelected = stxt;
-            jQuery('.after_img_btn').html(onSelected);
+        //Подготовка необходимых объектов
+        var url = jQuery(location).attr('href');
+        if (url.indexOf('term.php?taxonomy=category') + 1) {
+            googleImagesPostId = jQuery("[name = 'tag_ID']").val();
+            jQuery('.thmb_btn').hide();
         }
-    }
-    //сделать запрос Гуглу
-    // распарсить ответ
-    //вывести ответ
+        jQuery("#cat_top_description").focus(function () {
+            textArea = jQuery("#cat_top_description");
+            textAreaJs = document.getElementById('cat_top_description');
+        });
+        jQuery("#cat_bottom_description").focus(function () {
+            textArea = jQuery("#cat_bottom_description");
+            textAreaJs = document.getElementById('cat_bottom_description');
+        });
 
-    // Скрытие окна и показ окна
-    jQuery('.agi_popup').click(function () {
-        jQuery('.agi_popup').toggle();
-        jQuery('.agi_window').toggle();
-    });
-    jQuery('.popap_cross').click(function () {
-        jQuery('.agi_popup').toggle();
-        jQuery('.agi_window').toggle();
-    });
-
-    // Поиск
-    jQuery('a.srch_btn').click(function () {
-        googleImagesPage = 0;
-        jQuery('.prev_p').html('');
-        agi_googleImagesSearch();
-    });
-    jQuery('.prev_p').click(function () { 
-        if(googleImagesPage > 0) googleImagesPage--;
-        jQuery('.numpage').text(googleImagesPage);
-        if(googleImagesPage == 0) {
-            jQuery('.prev_p').html('');
-            jQuery('.numpage').text('');
+        if ((url.indexOf('post.php') + 1 && url.indexOf('action=edit') + 1) || (url.indexOf('post-new.php') + 1)) {
+            textArea = jQuery("#content");
+            textAreaJs = document.getElementById('content');
         }
-        agi_googleImagesSearch();
-    });
-    jQuery('.next_p').click(function () {
-        googleImagesPage++;
-        if(googleImagesPage == 1 ) jQuery('.prev_p').html('←Prev');
-        jQuery('.numpage').text(googleImagesPage);
-        agi_googleImagesSearch();
-    });
 
-    // Мониторим положение курсора в редакторе
-    jQuery("#content").focusout(function () {
-        carPos = jQuery(this)[0].selectionStart;
-    });
-    jQuery("#cat_top_description").focusout(function () {
-        carPos = jQuery(this)[0].selectionStart;
-    });
-    jQuery("#cat_bottom_description").focusout(function () {
-        carPos = jQuery(this)[0].selectionStart;
-    });
 
-    // Горячие клавиши для показа окна
-    document.onkeydown = function(e){
-        e = e || window.event;
-        if(e.ctrlKey && e.keyCode == 73){ //ctrl+i
-            e.preventDefault();
-            if(window.getSelection){
-                carPos = textArea[0].selectionStart; // Мониторим положение курсора в редакторе
-            }
+        // Добавим  html
+        addHtml();
+
+        // Скроем в категориях Добавление миниатюры
+        if (jQuery("h1:first").text() == 'Изменить рубрику') {
+            jQuery('.thmb_btn').hide();
+        }
+
+        // Обработаем клики
+        jQuery('.img_btn').click(function () {
+            jQuery('.agi_window').attr('win', 'img');
             AgiWinOpen();
-            window.getSelection().removeAllRanges();
+        });
+
+        jQuery('.thmb_btn').click(function () {
+            //if(content!=jQuery("#content").val()) jQuery("form#post").submit();
+            jQuery('.agi_window').attr('win', 'thmb');
+            AgiWinOpen();
+        });
+
+        //ОБработаем выделение текста
+        jQuery("#content").select(function () {
+            OnSelect();
+        });
+        jQuery("#cat_top_description").select(function () {
+            OnSelect();
+        });
+        jQuery("#cat_bottom_description").select(function () {
+            OnSelect();
+        });
+
+        function OnSelect() {
+            googleImagesPage = 0;
+            var stxt = ShowSelection();
+            if (2 < stxt.length && stxt.length < 50) {
+                onSelected = stxt;
+                jQuery('.after_img_btn').html(onSelected);
+            }
+        }
+
+        //сделать запрос Гуглу
+        // распарсить ответ
+        //вывести ответ
+
+        // Скрытие окна и показ окна
+        jQuery('.agi_popup').click(function () {
+            jQuery('.agi_popup').toggle();
+            jQuery('.agi_window').toggle();
+        });
+        jQuery('.popap_cross').click(function () {
+            jQuery('.agi_popup').toggle();
+            jQuery('.agi_window').toggle();
+        });
+
+        // Поиск
+        jQuery('a.srch_btn').click(function () {
+            googleImagesPage = 0;
+            jQuery('.prev_p').html('');
+            agi_googleImagesSearch();
+        });
+        jQuery('.prev_p').click(function () {
+            if (googleImagesPage > 0) googleImagesPage--;
+            jQuery('.numpage').text(googleImagesPage);
+            if (googleImagesPage == 0) {
+                jQuery('.prev_p').html('');
+                jQuery('.numpage').text('');
+            }
+            agi_googleImagesSearch();
+        });
+        jQuery('.next_p').click(function () {
+            googleImagesPage++;
+            if (googleImagesPage == 1) jQuery('.prev_p').html('←Prev');
+            jQuery('.numpage').text(googleImagesPage);
+            agi_googleImagesSearch();
+        });
+
+        // Мониторим положение курсора в редакторе
+        jQuery("#content").focusout(function () {
+            carPos = jQuery(this)[0].selectionStart;
+        });
+        jQuery("#cat_top_description").focusout(function () {
+            carPos = jQuery(this)[0].selectionStart;
+        });
+        jQuery("#cat_bottom_description").focusout(function () {
+            carPos = jQuery(this)[0].selectionStart;
+        });
+
+        // Горячие клавиши для показа окна
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if (e.ctrlKey && e.keyCode == 73) { //ctrl+i
+                e.preventDefault();
+                if (window.getSelection) {
+                    carPos = textArea[0].selectionStart; // Мониторим положение курсора в редакторе
+                }
+                AgiWinOpen();
+                window.getSelection().removeAllRanges();
+                jQuery('.agi_srch_txt').focus();
+
+            }
+            if (e.keyCode == 27) {                    //esc
+                if (window.getSelection) {
+                    var selection = window.getSelection();
+                    selection.removeAllRanges();
+                }
+                if (jQuery('.agi_preview').css('display') == 'block') {
+                    jQuery('.agi_preview').html('').hide();
+                } else {
+                    jQuery('.agi_popup').hide();
+                    jQuery('.agi_window').hide();
+                }
+            }
+            if (e.keyCode == 13 && jQuery('.agi_srch_txt').is(":focus")) {  //search on enter
+                if (window.getSelection) {
+                    var selection = window.getSelection();
+                    selection.removeAllRanges();
+                }
+                jQuery('a.srch_btn').trigger('click');
+            }
+        }
+
+        //Ф-я открытия окна
+
+        function AgiWinOpen() {
+            if (!carPos) carPos = 0;
+
+            //вывести окно
+            jQuery('.agi_popup').toggle();
+            jQuery('.agi_window').toggle();
+
+            alt = getNearestTitle(carPos);
+
+            var selectText = onSelected;//ShowSelection();
+            if (selectText != '' && selectText != LastQuery) {
+                jQuery('.agi_srch_txt').val(selectText);
+                jQuery('a.srch_btn').trigger('click');
+                LastQuery = selectText;
+            }
+
             jQuery('.agi_srch_txt').focus();
-
         }
-        if(e.keyCode == 27){                    //esc
-            if(window.getSelection){
-                var selection = window.getSelection();
-                selection.removeAllRanges();
+
+        // Ф-я чтения выделенного
+        function ShowSelection() {
+            var textComponent = textAreaJs;
+            var selectedText;
+            // IE version
+            if (document.selection != undefined) {
+                textComponent.focus();
+                var sel = document.selection.createRange();
+                selectedText = sel.text;
+                document.selection.empty();
             }
-            if(jQuery('.agi_preview').css('display') == 'block'){ 
-                jQuery('.agi_preview').html('').hide();
-            }else {
-                jQuery('.agi_popup').hide();
-                jQuery('.agi_window').hide();
+            // Mozilla version
+            else if (textComponent.selectionStart != undefined) {
+                var startPos = textComponent.selectionStart;
+                var endPos = textComponent.selectionEnd;
+                selectedText = textComponent.value.substring(startPos, endPos)
             }
-        }
-        if(e.keyCode == 13 && jQuery('.agi_srch_txt').is( ":focus" )){  //search on enter
-            if(window.getSelection){
-                var selection = window.getSelection();
-                selection.removeAllRanges();
-            }
-            jQuery('a.srch_btn').trigger('click');
-        }
-    }
-
-    //Ф-я открытия окна
-
-    function AgiWinOpen() {
-        if(!carPos) carPos = 0;
-
-        //вывести окно
-        jQuery('.agi_popup').toggle();
-        jQuery('.agi_window').toggle();
-
-        alt = getNearestTitle(carPos);
-
-        var selectText = onSelected;//ShowSelection();
-        if(selectText != '' && selectText != LastQuery){
-            jQuery('.agi_srch_txt').val(selectText);
-            jQuery('a.srch_btn').trigger('click');
-            LastQuery = selectText;
+            return selectedText;
         }
 
-        jQuery('.agi_srch_txt').focus();
-    }
-
-    // Ф-я чтения выделенного
-    function ShowSelection()
-    {
-        var textComponent = textAreaJs;
-        var selectedText;
-        // IE version
-        if (document.selection != undefined)
-        {
-            textComponent.focus();
-            var sel = document.selection.createRange();
-            selectedText = sel.text;
-            document.selection.empty();
-        }
-        // Mozilla version
-        else if (textComponent.selectionStart != undefined)
-        {
-            var startPos = textComponent.selectionStart;
-            var endPos = textComponent.selectionEnd;
-            selectedText = textComponent.value.substring(startPos, endPos)
-        }
-        return selectedText;
-    }
-
-    // Задаем ширину из настроек
-    setOptionWidth();
+        // Задаем ширину из настроек
+        setOptionWidth();
 });
 
 //поиск и вывод превью картинок

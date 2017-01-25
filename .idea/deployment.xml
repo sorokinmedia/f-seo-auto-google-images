@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="investk2">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="investn1">
     <serverData>
       <paths name="avilla">
         <serverdata>
@@ -61,7 +61,7 @@
       <paths name="prbere (project level)">
         <serverdata>
           <mappings>
-            <mapping deploy="/101urist.com/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/pro-samca.ru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
