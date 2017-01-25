@@ -340,7 +340,7 @@ function findNearestProportion($ar,$proportion){
 
 function _getFileNameAgi($search)
 {
-    $search = preg_replace ("/[^a-zA-ZА-Яа-я0-9\s]/","_",$search);
+
     $converter = array(
         'а' => 'a',   'б' => 'b',   'в' => 'v',
         'г' => 'g',   'д' => 'd',   'е' => 'e',
