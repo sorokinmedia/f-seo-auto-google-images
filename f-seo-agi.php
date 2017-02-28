@@ -230,7 +230,7 @@ function agi_google_images_upload()
     $attachment = array(
         'guid' => $upload_image['url'],
         'post_mime_type' => $image->mime,
-        'post_title' => (get_option('gi_search_title') == "" ? "" : $this->_mb_ucfirst($_POST['search'])),
+        'post_title' => '',//(get_option('gi_search_title') == "" ? "" : $this->_mb_ucfirst($_POST['search'])),
         'post_content' => '',
         'post_status' => 'inherit',
     );
@@ -305,18 +305,14 @@ function getFileNameWithSize($find_file_name,$path,$orientation,$width,$proporti
             $cut_height = str_replace($find_file_name . 'x', '' , $name );
             if($orientation == 'horizontal' && (int)$width > (int)$cut_height ){
                 $ar[] = array($name,(int)$width/(int)$cut_height);
-                /*$res = $name;
-                break;*/
+
             }
             else if($orientation == 'vertical' && (int)$width < (int)$cut_height ){
                 $ar[] = array($name,(int)$width/(int)$cut_height);
-                /*$res = $name;
-                break;*/
+
             }
             else if($orientation == 'square' && (int)$width == (int)$cut_height ){
                 $ar[] = array($name,(int)$width/(int)$cut_height);
-                /*$res = $name;
-                break;*/
             }
             else continue;
         }

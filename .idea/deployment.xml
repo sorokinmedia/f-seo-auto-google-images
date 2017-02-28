@@ -30,10 +30,17 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="hairse69">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/hairsecrets.online/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="investk2">
         <serverdata>
           <mappings>
-            <mapping deploy="/otdix-na-altai.ru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/moyaspina.com/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

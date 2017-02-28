@@ -12,6 +12,7 @@ var agi_width_thmb;
 var LastQuery;
 var content;
 
+
 function addHtml() {
     jQuery('<a class="img_btn">G<span>Автокартинка</span></a>').insertAfter('.wp-media-buttons');
     jQuery('<a class="thmb_btn">G<span>Автоминиатюра</span></a>').insertAfter('.img_btn');
@@ -464,6 +465,7 @@ function agi_googleImagesUpload(item, side, width,orientation,altI,proportion) {
         'proportion': proportion
     };
     $.post(ajaxurl, data2, function(response){
+        console.log(response);
         if(response === 'WP_Error') alert('Картинка недоступна');
         else {
             var circle = '';
@@ -477,6 +479,33 @@ function agi_googleImagesUpload(item, side, width,orientation,altI,proportion) {
             carPos = carPos + img.length;
         }
     });
+
+    /*var pathname = jQuery(location).attr('host');
+    jQuery.ajax({
+        url:    '//' + pathname + '/wp-content/plugins/f-seo-auto-google-images/upload.php', //Адрес подгружаемой страницы
+        type:     "POST", //Тип запроса
+        //dataType: "html", //Тип данных
+        data: data2,
+        success: function(response) { //Если все нормально
+            console.log(response);
+            if(response === 'WP_Error') alert('Картинка недоступна');
+            else {
+                var circle = '';
+                var pathname = jQuery(location).attr('host');
+                //alert('Добавлено! ' + response);
+                item.find('.load_img').text('Добавлено');
+                if(item.parent().find('#circle_img').prop("checked")) circle = ' img_rounded';
+                var img = '<img src="' + '//' + pathname + response + '" class="' + side
+                    + circle  + '"' +' alt="' + curAlt + '"/>';
+                InsertByCaretPos(carPos, img);
+                carPos = carPos + img.length;
+            }
+        },
+        error: function(response) { //Если ошибка
+            alert("Ошибка  " + response.status);
+            console.log(response);
+        }
+    });*/
 
 }
 
