@@ -466,7 +466,7 @@ function agi_googleImagesUpload(item, side, width,orientation,altI,proportion) {
     };
     $.post(ajaxurl, data2, function(response){
         console.log(response);
-        if(response === 'WP_Error') alert('Картинка недоступна');
+        if(response === 'WP_Error') alert('Картинка недоступна');    
         else {
             var circle = '';
             var pathname = jQuery(location).attr('host');

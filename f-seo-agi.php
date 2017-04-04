@@ -95,10 +95,17 @@ function agi_admin_head(){
 add_action('admin_head','agi_admin_head');
 
 
-// поиск и загрузка картинок
+/*
+ * Функционал оиска и загрузки картинок
+ */
+
+/*
+ * Ф-я непосредственно поиска. Вызывается на фронте ajax запросом, возвращает распарсенную выдачу Google
+ */
 function agi_google_images_search()
 {
 
+    /* Параметры запроса */
     $params = array(
         "safe" => $_POST['safety'],
         "q" => urlencode($_POST['q']),
@@ -160,6 +167,8 @@ function agi_google_images_search()
     {
         $url .= "&".$key."=".$value;
     }
+
+    /* Запрос */
     $response = wp_remote_get($url, array(
         'headers' => array(
             'Referer' => $referer,
@@ -167,6 +176,7 @@ function agi_google_images_search()
         ),
     ));
 
+    /* Парсим ответ */
     preg_match_all("/<div class=\"rg_di.*\".*>.*<a href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
     $items = array();
 
@@ -195,6 +205,8 @@ function agi_google_images_search()
 }
 add_action('wp_ajax_agi_google_images_search', 'agi_google_images_search' );
 
+
+/* Загрузка каринок на сайт - вызывается на фронте ajax запросом */
 function agi_google_images_upload()
 {
     $url = $_POST['url'];
@@ -274,6 +286,7 @@ function agi_google_images_upload()
 }
 add_action('wp_ajax_agi_google_images_upload', 'agi_google_images_upload' );
 
+/* Сортировка файлов по дате */
 function listdir_by_date($path){
     $dir = opendir($path);
     $list = array();
@@ -292,6 +305,7 @@ function listdir_by_date($path){
     return $list;
 }
 
+/* Получение имя файла, подходящего по пропорциям */
 function getFileNameWithSize($find_file_name,$path,$orientation,$width,$proportion){
     //$path = '/home/i/investk2/otdix-na-altai.ru/public_html/wp-content/uploads/2016/10';
     $names = listdir_by_date($path);
@@ -299,24 +313,28 @@ function getFileNameWithSize($find_file_name,$path,$orientation,$width,$proporti
     $res = $find_file_name;
     $cut_height = '';
     $ar = array();
+
     foreach ( $names as $name){
+
         $s = strpos($name,$find_file_name);//проверяем имя картинки
+
         if($s || $s === 0){ // если имя картинки совпало с искомым
+
             $cut_height = str_replace($find_file_name . 'x', '' , $name );
-            if($orientation == 'horizontal' && (int)$width > (int)$cut_height ){
+
+            if(
+                    ($orientation == 'horizontal' && (int)$width > (int)$cut_height)
+                    ||($orientation == 'vertical' && (int)$width < (int)$cut_height)
+                    ||($orientation == 'square' && (int)$width == (int)$cut_height)
+
+            ) {
                 $ar[] = array($name,(int)$width/(int)$cut_height);
 
-            }
-            else if($orientation == 'vertical' && (int)$width < (int)$cut_height ){
-                $ar[] = array($name,(int)$width/(int)$cut_height);
-
-            }
-            else if($orientation == 'square' && (int)$width == (int)$cut_height ){
-                $ar[] = array($name,(int)$width/(int)$cut_height);
-            }
-            else continue;
+            } else continue;
         }
+
         if($i>20) break;
+
         $i++;
     }
 
@@ -334,6 +352,7 @@ function findNearestProportion($ar,$proportion){
     return $max;
 }
 
+/* Строит имя файла на основе поискового запроса */
 function _getFileNameAgi($search)
 {
 
