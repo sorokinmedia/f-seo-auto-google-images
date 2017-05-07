@@ -195,10 +195,11 @@ jQuery(document).ready(function() {
             carPos = jQuery(this)[0].selectionStart;
         });
 
+        window.eeCommon = new EventEmitter();
         // Горячие клавиши для показа окна
-        document.onkeydown = function (e) {
+        window.eeCommon.addListener('commonKeyDown', function(e) {
             e = e || window.event;
-            if (e.ctrlKey && e.keyCode == 73) { //ctrl+i
+            if (e.ctrlKey && e.keyCode == 71) { //ctrl+i
                 e.preventDefault();
                 if (window.getSelection) {
                     carPos = textArea[0].selectionStart; // Мониторим положение курсора в редакторе
@@ -227,7 +228,7 @@ jQuery(document).ready(function() {
                 }
                 jQuery('a.srch_btn').trigger('click');
             }
-        }
+        })
 
         //Ф-я открытия окна
 
