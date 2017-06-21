@@ -195,9 +195,13 @@ jQuery(document).ready(function() {
             carPos = jQuery(this)[0].selectionStart;
         });
 
-        window.eeCommon = new EventEmitter();
+        try{
+            window.eeCommon = new EventEmitter();
+        }catch( window) {
+            console.log( 'Window.eeCommon=' + window.eeCommon)
+        }
         // Горячие клавиши для показа окна
-        window.eeCommon.addListener('commonKeyDown', function(e) {
+        if(window.eeCommon) window.eeCommon.addListener('commonKeyDown', function(e) {
             e = e || window.event;
             if (e.ctrlKey && e.keyCode == 71) { //ctrl+i
                 e.preventDefault();
