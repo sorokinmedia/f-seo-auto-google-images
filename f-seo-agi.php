@@ -168,6 +168,7 @@ function agi_google_images_search()
         $url .= "&".$key."=".$value;
     }
 
+
     /* Запрос */
     $response = wp_remote_get($url, array(
         'headers' => array(
@@ -177,8 +178,11 @@ function agi_google_images_search()
     ));
 
     /* Парсим ответ */
-    preg_match_all("/<div class=\"rg_di.*\".*>.*<a href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
+    preg_match_all("/<div class=\"rg_bx.*\".*>.*<a href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
     $items = array();
+
+    //echo json_encode($matches);
+    //die();
 
     foreach ($matches[1] as $number => $match)
     {

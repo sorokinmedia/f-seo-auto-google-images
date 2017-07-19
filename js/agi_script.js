@@ -306,6 +306,7 @@ function agi_googleImagesSearch() {
 
     searchXhr = $.post(ajaxurl, data, function(items){
 
+        console.log(items)
         if (items.length == 0)
         {
             alert( 'Не нашел');
@@ -313,6 +314,7 @@ function agi_googleImagesSearch() {
             //doc.hide();
             return;
         }
+
         jQuery('.agi_results').html('');
 
         for(var i = 0; i<items.length;i++){
@@ -447,6 +449,8 @@ function agi_googleImagesSearch() {
                 jQuery('.agi_window').toggle();
             }
         });
+
+        //jQuery('.agi_results').html(items[0]);
 
         searchXhr = null;
 

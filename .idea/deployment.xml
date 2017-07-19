@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="jkrivts">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="investk2">
     <serverData>
       <paths name="avilla">
         <serverdata>
@@ -54,7 +54,7 @@
       <paths name="jkrivts">
         <serverdata>
           <mappings>
-            <mapping deploy="/pravovoi.center/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/brutal.guru/public_html/wp-content/plugins/f-seo-auto-google-images" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
