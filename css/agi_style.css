@@ -39,7 +39,7 @@
 }
 .agi_preview:before{
     content: '';
-    background: url(/wp-content/plugins/f-seo-auto-google-images/img/cross4.png) 0 0 no-repeat;
+    background: url(/wp-content/plugins/f-seo-auto-google-images/img/4V14I_croper_ru.png) 0 0 no-repeat;
     width: 48px;
     height: 48px;
     display: inline-block;
@@ -150,7 +150,7 @@ a.thmb_btn span,a.thmb_btn{
     right: 1%;
     width: 48px;
     height: 48px;
-    background: url("/wp-content/plugins/f-seo-auto-google-images/img/cross4.png") 0 0 no-repeat;
+    background: url("/wp-content/plugins/f-seo-auto-google-images/img/4V14I_croper_ru.png") 0 0 no-repeat;
 }
 .agi_param{
     clear: both;
