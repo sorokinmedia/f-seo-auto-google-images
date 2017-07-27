@@ -96,7 +96,7 @@ add_action('admin_head','agi_admin_head');
 
 
 /*
- * Функционал оиска и загрузки картинок
+ * Функционал поиска и загрузки картинок
  */
 
 /*
@@ -178,7 +178,7 @@ function agi_google_images_search()
     ));
 
     /* Парсим ответ */
-    preg_match_all("/<div class=\"rg_bx.*\".*>.*<a href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
+    preg_match_all("/<div .* class=\"rg_bx.*\".*>.*<a href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
     $items = array();
 
     //echo json_encode($matches);

@@ -450,7 +450,7 @@ function agi_googleImagesSearch() {
             }
         });
 
-        //jQuery('.agi_results').html(items[0]);
+        //jQuery('.agi_results').html(items[1]);
 
         searchXhr = null;
 
