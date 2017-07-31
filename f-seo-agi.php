@@ -177,8 +177,11 @@ function agi_google_images_search()
         ),
     ));
 
+    /*echo json_encode($response['body']);
+    die();*/
+
     /* Парсим ответ */
-    preg_match_all("/<div .* class=\"rg_bx.*\".*>.*<a href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
+    preg_match_all("/<div .* class=\"rg_bx.*\".*>.*<a .* href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
     $items = array();
 
     //echo json_encode($matches);
