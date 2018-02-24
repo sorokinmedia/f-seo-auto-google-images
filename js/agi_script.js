@@ -404,7 +404,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',rem.attr('orient'),0,rem.attr('proportion'));
+            agi_googleImagesUpload(rem.find('.agi_img_res'),left,'medium',rem.attr('orient'), 0, rem.attr('proportion'));
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -412,7 +412,7 @@ function agi_googleImagesSearch() {
             var rem = jQuery(this).parent();
             rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',rem.attr('orient'),0,rem.attr('proportion'));
+            agi_googleImagesUpload(rem.find('.agi_img_res'),right,'medium',rem.attr('orient'), 0, rem.attr('proportion'));
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
         });
@@ -444,7 +444,7 @@ function agi_googleImagesSearch() {
                 var rem = jQuery(this).parent();
                 rem = rem.parent();
                 rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
-                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',rem.attr('orient'),0,rem.attr('proportion'));
+                agi_googleImagesUpload(rem.find('.agi_img_res'), cen, 'large',rem.attr('orient'), 0, rem.attr('proportion'));
                 jQuery('.agi_popup').toggle();
                 jQuery('.agi_window').toggle();
             }
@@ -457,12 +457,12 @@ function agi_googleImagesSearch() {
     }, "json");
 }
 
-function agi_googleImagesUpload(item, side, width,orientation,altI,proportion) {
+function agi_googleImagesUpload(item, side, width, orientation, altI, proportion) {
     var $ = jQuery;
 
-    if(altI) var curAlt = altI;
-    else var curAlt = alt;
-
+    /*if(altI) var curAlt = altI;
+    else var curAlt = alt;*/
+    var curAlt = '';
     var data2 = {
         'action': 'agi_google_images_upload',
         'url': item.attr('url'),
@@ -567,7 +567,7 @@ function getNearestTitle(pos) {
     while( res = regexp.exec(parsText) ){
         i = res.index;
     }
-    if( i == -1 ) return null;
+    if( i == -1 ) return '';
 
     // для р3
     var regexp = /<h3>/gi;
