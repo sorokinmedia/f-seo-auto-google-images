@@ -348,7 +348,8 @@ function agi_googleImagesSearch() {
 
             var html = '<div class="founded_img" mark="" orient="'
                 +orientation+'" proportion="'+propor+'"><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
-                + '" url="' + items[i].imgurl + '" href="' + srcFull
+                + '" url="' + items[i]['ww.google.com/imgres?imgurl']
+                + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
                 +  circle;
@@ -518,7 +519,7 @@ function agi_googleImagesUpload(item, side, width, orientation, altI, proportion
 
 }
 
-function agi_googleThumbnailUpload(item,orientation) {
+function agi_googleThumbnailUpload(item, orientation) {
     var $ = jQuery;
 
     var data_thmb = {
