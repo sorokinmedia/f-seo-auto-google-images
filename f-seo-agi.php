@@ -109,7 +109,8 @@ function agi_google_images_search()
     $params = array(
         "safe" => $_POST['safety'],
         "q" => urlencode($_POST['q']),
-        "start" => $_POST['page']*20,
+        //"start" => $_POST['page']*12,
+        "ijn" => $_POST['page'],
         "sa" => "X",
         "search_orient" => $_POST['search_orient']
     );
@@ -161,7 +162,7 @@ function agi_google_images_search()
     $tbs = trim($tbs, ", ");
     if (!empty($tbs)) $params['tbs'] = $tbs;
 
-    $url = "https://www.google.com/search?tbm=isch&ijn=3";
+    $url = "https://www.google.com/search?as_st=y&tbm=isch&sa=1";
 
     foreach ($params as $key => $value)
     {
@@ -172,26 +173,26 @@ function agi_google_images_search()
     /* Запрос */
     $response = wp_remote_get($url, array(
         'headers' => array(
-            'Referer' => $referer,
-            'User-Agent' => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
+            'Referer' => 'https://www.google.com/',
+            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
         ),
     ));
 
-    /*echo json_encode($response['body']);
-    die();*/
-
     /* Парсим ответ */
-    preg_match_all("/<div .* class=\"rg_bx.*\".*>.*<a .* href=\"(.*)\".*<img.*data-src=\"(.*)\".*<\/a>/U", $response['body'], $matches);
+    preg_match_all(
+            "/<div .* class=\"rg_meta.*\".*>(.*)<\/div>/U",
+            $response['body'], $matches
+    );
     $items = array();
 
-    //echo json_encode($matches);
-    //die();
+    /*echo json_encode($matches);
+        die();*/
 
     foreach ($matches[1] as $number => $match)
     {
-        if (count($items) >= 14) break;
+        //if (count($items) > 13) break;
         $item = array();
-        $match = substr($match, 8);
+        /*$match = substr($match, 8);
         foreach(explode("&amp;", $match) as $pair)
         {
             list($key, $value) = explode("=", $pair, 2);
@@ -201,9 +202,16 @@ function agi_google_images_search()
 
         if(get_option('agi_img_churl')){
             $check = fopen($item['imgurl'],"r");if($check) $item['churl'] = 'norm';else $item['churl'] = 'b9ka'; fclose($check);
-        }
+        }*/
 
-        $item['thumbnail'] = $matches[2][$number];
+        $data = json_decode($match);
+        $item['thumbnail'] = $data->tu;
+        $item['imgurl'] = $data->ou;
+        $item['id'] = $data->id;
+        $item['w'] = $data->oh;
+        $item['h'] = $data->oh;
+        $item['imgrefurl'] = $data->isu;
+
         $items[] = $item;
     }
 

@@ -26,7 +26,7 @@ function addHtml() {
         '<a class="srch_btn">Find</a>' +
         '</div></div>');
 
-    jQuery('.agi_window').append('<div class="agi_results"></div><span class="agi_pages prev_p"></span><span class="numpage"></span><span class="agi_pages next_p">Next→</span><span class="popap_cross"></span>');
+    jQuery('.agi_window').append('<div class="agi_results"></div><span class="agi_pages prev_p"></span><span class="numpage"></span><span class="agi_pages next_p">next→</span><span class="popap_cross"></span>');
     jQuery('.afi_win_left').append('<div class="agi_param"></div>');
 
     jQuery('.btns_instruct').append('"+"  -  добавить картинку и сотаться на странице попап (если нажать на кнопку без плюса, окно закоется)' +
@@ -170,7 +170,7 @@ jQuery(document).ready(function() {
         });
         jQuery('.prev_p').click(function () {
             if (googleImagesPage > 0) googleImagesPage--;
-            jQuery('.numpage').text(googleImagesPage);
+            jQuery('.numpage').text(googleImagesPage + 1);
             if (googleImagesPage == 0) {
                 jQuery('.prev_p').html('');
                 jQuery('.numpage').text('');
@@ -179,8 +179,8 @@ jQuery(document).ready(function() {
         });
         jQuery('.next_p').click(function () {
             googleImagesPage++;
-            if (googleImagesPage == 1) jQuery('.prev_p').html('←Prev');
-            jQuery('.numpage').text(googleImagesPage);
+            if (googleImagesPage == 1) jQuery('.prev_p').html('←prev');
+            jQuery('.numpage').text(googleImagesPage + 1);
             agi_googleImagesSearch();
         });
 
@@ -317,7 +317,7 @@ function agi_googleImagesSearch() {
 
         jQuery('.agi_results').html('');
 
-        for(var i = 0; i<items.length;i++){
+        for(var i = 0; i < items.length; i++){
             
             var srcFull = ajaxurl + "?action=google_images_get&full=true&url=" + items[i].imgurl + "&referer=" + items[i].imgrefurl;
 
@@ -348,7 +348,7 @@ function agi_googleImagesSearch() {
 
             var html = '<div class="founded_img" mark="" orient="'
                 +orientation+'" proportion="'+propor+'"><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
-                + '" url="' + items[i]['ww.google.com/imgres?imgurl']
+                + '" url="' + items[i]['imgurl']
                 + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
                 + '</span>'
@@ -534,6 +534,7 @@ function agi_googleThumbnailUpload(item, orientation) {
     $.post(ajaxurl, data_thmb, function(response){
         if(response === 'WP_Error') alert('Картинка недоступна');
         else {
+            console.log(response)
             var pathname = jQuery(location).attr('host');
             item.find('.load_img').text('Добавлено');
             jQuery('#_thumbnail_id').val(response[0]);
