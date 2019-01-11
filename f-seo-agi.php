@@ -208,7 +208,7 @@ function agi_google_images_search()
         $item['thumbnail'] = $data->tu;
         $item['imgurl'] = $data->ou;
         $item['id'] = $data->id;
-        $item['w'] = $data->oh;
+        $item['w'] = $data->ow;
         $item['h'] = $data->oh;
         $item['imgrefurl'] = $data->isu;
 
@@ -280,7 +280,16 @@ function agi_google_images_upload()
         update_post_meta( $post_id, '_thumbnail_id', $attachment_id );
         $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option('medium_size_w'),$upload_dir['path'],$orientation,get_option('medium_size_w'),$propotion)[0];
     }
-    if($width) $file_dir = $upload_dir['path']."/".getFileNameWithSize($short_name . '-' . get_option($width . '_size_w'),$upload_dir['path'],$orientation,get_option($width . '_size_w'),$propotion)[0];
+    if($width) {
+        $file_dir = $upload_dir['path']."/"
+            .getFileNameWithSize(
+                $short_name . '-' . get_option($width . '_size_w'),
+                $upload_dir['path'],
+                $orientation,
+                get_option($width . '_size_w'),
+                $propotion
+            )[0];
+    }
 
     $pos = strpos($file_dir,'/wp-content');
     $file_dir = substr($file_dir, $pos); 

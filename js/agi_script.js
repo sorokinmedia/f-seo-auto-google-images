@@ -460,7 +460,6 @@ function agi_googleImagesSearch() {
 
 function agi_googleImagesUpload(item, side, width, orientation, altI, proportion) {
     var $ = jQuery;
-
     /*if(altI) var curAlt = altI;
     else var curAlt = alt;*/
     var curAlt = '';
