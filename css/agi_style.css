@@ -150,7 +150,7 @@ a.thmb_btn span,a.thmb_btn{
     right: 1%;
     width: 48px;
     height: 48px;
-    background: url("/wp-content/plugins/f-seo-auto-google-images/img/4V14I_croper_ru.png") 0 0 no-repeat;
+    background: url(/wp-content/plugins/f-seo-auto-google-images/img/4V14I_croper_ru.png) 0 0 no-repeat;
 }
 .agi_param{
     clear: both;
@@ -174,7 +174,6 @@ a.thmb_btn span,a.thmb_btn{
     margin-top: 5px;
     display: block;
     background: #00a0d2;
-    border-color: #0073aa;
     color: #fff;
     float: left;
     font-size: 13px;
@@ -184,8 +183,7 @@ a.thmb_btn span,a.thmb_btn{
     margin-right: 5px;
     width: 45px;
     cursor: pointer;
-    border-width: 1px;
-    border-style: solid;
+    border: 1px solid #0073aa;
     -webkit-appearance: none;
     -webkit-border-radius: 3px;
     border-radius: 3px;
