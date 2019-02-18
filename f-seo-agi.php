@@ -21,7 +21,7 @@ add_action( 'admin_init', 'fseo_agi_init' );
 // страница администрирования
 function fseo_agi_setup_menu() {
     // верхний уровень
-    add_menu_page('F-Seo Auto Google Images', 'F-Seo Auto Google Images', 'manage_option', 'fseo_agi_settings_page', 'sb_admin_fseo_agi');
+    add_menu_page('F-Seo AGI', 'F-Seo AGI', 'manage_option', 'fseo_agi_settings_page', 'sb_admin_fseo_agi');
     // подуровни
     add_submenu_page( 'fseo_agi_settings_page', 'Настройки', 'Настройки', 'manage_options', 'f-seo-agi',  'sb_admin_fseo_agi_sett');
     // добавляем настройку для плагина
@@ -43,7 +43,7 @@ function register_agi_settings()
  */
 function sb_admin_fseo_agi_sett()
 {
-    echo '<h1>Настройки F-Seo-Auto-Google-Images</h1>';
+    echo '<h1>Настройки F-Seo Auto Google Images</h1>';
     if ($_SERVER['REQUEST_METHOD'] === 'POST'
         && $_POST['agi_img_churl'] !== get_option('agi_img_churl'))
     {
