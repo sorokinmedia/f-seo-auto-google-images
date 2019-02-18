@@ -27,7 +27,7 @@ class AgiGoogleImage
      */
     public function __construct($url, $referer)
     {
-        //todo: wtf?
+        //если есть пробелы, декодим
         if (strrpos($url,'252020') || strrpos($url,'252520')) {
             $url = urldecode($url);
         }
@@ -73,45 +73,30 @@ class AgiGoogleImage
         $this->height = imagesy($this->_gd_handle);
     }
 
+    /**
+     * уничтожение объекта
+     */
     public function __destruct()
     {
         imagedestroy($this->_gd_handle);
         unlink($this->filename);
     }
 
+    /**
+     * отправка в браузер
+     */
     public function sendToBrowser()
     {
-        header('Content-Type: '.$this->mime);
+        header('Content-Type: ' . $this->mime);
         echo file_get_contents($this->filename);
     }
 
+    /**
+     * сжатие изображения
+     * @param int $ratio
+     */
     public function compress($ratio = 80)
     {
         imagejpeg($this->_gd_handle, $this->filename, $ratio);
-    }
-
-    public function resize($newWidth, $newHeight)
-    {
-        if ($this->width > $this->height)
-        {
-            $width = $newWidth;
-            $height = $this->height * ($newHeight/$this->width);
-        }
-        if ($this->width < $this->height)
-        {
-            $width = $this->width * ($newWidth/$this->height);
-            $height = $newHeight;
-        }
-        if ($this->width === $this->height)
-        {
-            $width = $newWidth;
-            $height = $newHeight;
-        }
-        $gd_handle = imagecreatetruecolor($width, $height);
-        imagecopyresampled($gd_handle, $this->_gd_handle, 0, 0, 0, 0, $width, $height, $this->width, $this->height);
-        imagedestroy($this->_gd_handle);
-        $this->_gd_handle = $gd_handle;
-        $this->mime = 'image/jpg';
-        imagejpeg($this->_gd_handle, $this->filename, 80);
     }
 }

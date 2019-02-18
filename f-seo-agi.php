@@ -11,8 +11,7 @@ define('FSEO_AGI_CURRENT_VERSION', '2.5');
 
 include __DIR__ . '/AgiGoogleImage.php';
 
-
-// Подключаем JS скрипт
+// Подключаем js скрипт и css файл
 function fseo_agi_init(){
     wp_enqueue_style('agi_style', plugins_url('css/agi_style.css', __FILE__), null, FSEO_AGI_CURRENT_VERSION);
     wp_enqueue_script('agi_script', plugins_url( 'js/agi_script.js', __FILE__ ), false, FSEO_AGI_CURRENT_VERSION);
@@ -25,7 +24,7 @@ function fseo_agi_setup_menu() {
     add_menu_page('F-Seo Auto Google Images', 'F-Seo Auto Google Images', 'manage_option', 'fseo_agi_settings_page', 'sb_admin_fseo_agi');
     // подуровни
     add_submenu_page( 'fseo_agi_settings_page', 'Настройки', 'Настройки', 'manage_options', 'f-seo-agi',  'sb_admin_fseo_agi_sett');
-
+    // добавляем настройку для плагина
     add_action( 'admin_init', 'register_agi_settings' );
 }
 add_action('admin_menu', 'fseo_agi_setup_menu');
@@ -69,12 +68,11 @@ function sb_admin_fseo_agi_sett()
 function get_agi_img_width_option(){
     $options = array();
 
-    if(get_option('medium_size_w') &&  get_option('large_size_w')){
+    if (get_option('medium_size_w') &&  get_option('large_size_w')){
         $options[0] = get_option('medium_size_w');
         $options[1] = get_option('large_size_w');
         $options[2] = get_option('thumbnail_size_w');
-    }
-    else{
+    }  else{
         $options[0] = 300;
         $options[1] = 600;
         $options[2] = 250;
@@ -227,9 +225,9 @@ function agi_google_images_upload()
         die();
     }
     // формируем название файла
-    $filename = _getFileNameAgi($search).date('_dHis') . '.jpg';
+    $filename = _getFileNameAgi($search) . date('_dHis') . '.jpg';
     if ($image->mime === 'image/png') {
-        $filename = _getFileNameAgi($search).date('_dHis') . '.png';
+        $filename = _getFileNameAgi($search) . date('_dHis') . '.png';
     }
     // директория для загрузки медиафайлов
     $upload_dir = wp_upload_dir();
@@ -245,16 +243,16 @@ function agi_google_images_upload()
         'post_content' => '',
         'post_status' => 'inherit',
     ];
-    $file_path = $upload_dir['path'] . '/' . $filename;
+    $file_dir = $upload_dir['path'] . '/' . $filename;
     // цепляем вложение к посту
     $attachment_id = wp_insert_attachment($attachment, false, $post_id);
     if (!function_exists( 'wp_generate_attachment_data')){
         require_once ABSPATH . 'wp-admin' . '/includes/image.php';
     }
     // добавляем метадату к вложению
-    $attach_data = wp_generate_attachment_metadata( $attachment_id, $file_path);
+    $attach_data = wp_generate_attachment_metadata($attachment_id, $file_dir);
     wp_update_attachment_metadata( $attachment_id, $attach_data );
-    update_attached_file($attachment_id, $file_path);
+    update_attached_file($attachment_id, $file_dir);
     // формируем короткое имя
     $short_name = '';
     if (strpos($filename, '.jpg')){
@@ -267,7 +265,6 @@ function agi_google_images_upload()
         $short_name = str_replace('.gif','' ,$filename );
     }
     // если миниматюра, то связываем с постом
-    $file_dir = '';
     if ($thumb){
         update_post_meta($post_id, '_thumbnail_id', $attachment_id);
         $file_dir = $upload_dir['path'] . '/'
@@ -275,7 +272,8 @@ function agi_google_images_upload()
                 $short_name . '-' . get_option('medium_size_w'),
                 $upload_dir['path'],
                 $orientation,
-                get_option('medium_size_w'), $propotion
+                get_option('medium_size_w'),
+                $propotion
             )[0];
     }
     if ($width){
@@ -289,8 +287,8 @@ function agi_google_images_upload()
             )[0];
     }
     $pos = strpos($file_dir,'/wp-content');
-    $file_dir = substr($file_dir, $pos); 
-    $file_dir = str_replace('/public_html','',$file_dir );
+    $file_dir = substr($file_dir, $pos);
+    $file_dir = str_replace('/public_html','', $file_dir );
     if (strpos($file_dir,'WP_Error')){
         echo 'WP_Error';
     } else if ($thumb) {
@@ -336,29 +334,27 @@ function listdir_by_date($path)
  * @param $proportion
  * @return mixed
  */
-function getFileNameWithSize($find_file_name,$path,$orientation,$width,$proportion){
+function getFileNameWithSize($find_file_name, $path, $orientation, $width, $proportion){
     $names = listdir_by_date($path);
     $i = 0;
-    $res = $find_file_name;
-    $cut_height = '';
-    $ar = array();
+    $ar = [];
     foreach ($names as $name){
         //проверяем имя картинки
         $s = strpos($name,$find_file_name);
         // если имя картинки совпало с искомым
         if($s || $s === 0){
-            $cut_height = str_replace($find_file_name . 'x', '' , $name );
+            $cut_height = str_replace($find_file_name . 'x', '' , $name);
             if(
                 ($orientation === 'horizontal' && (int)$width > (int)$cut_height)
                 ||($orientation === 'vertical' && (int)$width < (int)$cut_height)
                 ||($orientation === 'square' && (int)$width === (int)$cut_height)
             ) {
-                $ar[] = array($name,(int)$width/(int)$cut_height);
+                $ar[] = [$name, (int)$width / (int)$cut_height];
             } else {
                 continue;
             }
         }
-        if ($i>20){
+        if ($i > 20){
             break;
         }
         $i++;
@@ -402,7 +398,6 @@ function _getFileNameAgi($search)
         'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
         'ь' => '',    'ы' => 'y',   'ъ' => '',
         'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
-
         'А' => 'A',   'Б' => 'B',   'В' => 'V',
         'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
         'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
@@ -442,5 +437,32 @@ function _getFileNameAgi($search)
         }
         closedir($handle);
     }
-    return $search . '_' . ($number+1);
+    return $search . '_' . ($number + 1);
 }
+
+/**
+ * замена основного файла на large - сжатый и с ресайзом
+ * @param $image_data
+ * @return mixed
+ */
+function replace_uploaded_image($image_data) {
+    // если нет большого изображения - выходим
+    if (!isset($image_data['sizes']['large'])) {
+        return $image_data;
+    }
+    // путь к загруженным файлам
+    $upload_directory = wp_upload_dir();
+    // основной файл
+    $uploaded_image_location = $upload_directory['basedir'] . '/' . $image_data['file'];
+    // large файл
+    $large_image_location = $upload_directory['path'] . '/' . $image_data['sizes']['large']['file'];
+    // удаляем основной файл
+    unlink($uploaded_image_location);
+    // на место удаленного основного копируем large с именем основного файла
+    copy($large_image_location, $uploaded_image_location);
+    // обновить дату и вернуть
+    $image_data['width'] = $image_data['sizes']['large']['width'];
+    $image_data['height'] = $image_data['sizes']['large']['height'];
+    return $image_data;
+}
+add_filter('wp_generate_attachment_metadata','replace_uploaded_image');

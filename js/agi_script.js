@@ -500,7 +500,7 @@ function agi_googleThumbnailUpload(item, orientation) {
         'referer': item.attr('referer'),
         'post_id': googleImagesPostId,
         'search': item.attr('q'),
-        'thumb':true,
+        'thumb': true,
         'orientation':orientation
     };
     $.post(ajaxurl, data_thmb, function(response){
