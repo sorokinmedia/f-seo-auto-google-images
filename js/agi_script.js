@@ -1,5 +1,5 @@
 /**
- * Created by F-SEO on 14.09.2016.
+ * основной js скрипт работы плагина
  */
 var carPos;
 var alt;
@@ -22,17 +22,17 @@ function addHtml() {
     jQuery('.wp-admin').append('<div class="agi_window"></div>');
 
     jQuery('.agi_window').append('<div class="afi_win_left"><div id="agi_search">' +
-        '<input type="text" class="agi_srch_txt" name="agi_srch_txt" id="agi_srch_txt" placeholder="Кто ищет, тот всегда найдет">' +
-        '<a class="srch_btn">Find</a>' +
+        '<input type="text" class="agi_srch_txt" name="agi_srch_txt" id="agi_srch_txt" placeholder="Введите запрос для поиска">' +
+        '<a class="srch_btn">Найти</a>' +
         '</div></div>');
 
-    jQuery('.agi_window').append('<div class="agi_results"></div><span class="agi_pages prev_p"></span><span class="numpage"></span><span class="agi_pages next_p">next→</span><span class="popap_cross"></span>');
+    jQuery('.agi_window').append('<div class="agi_results"></div><div class="agi_pagination"><span class="agi_pages prev_p"></span><span class="numpage"></span><span class="agi_pages next_p">след→</span></div><span class="popap_cross"></span>');
     jQuery('.afi_win_left').append('<div class="agi_param"></div>');
 
-    jQuery('.btns_instruct').append('"+"  -  добавить картинку и сотаться на странице попап (если нажать на кнопку без плюса, окно закоется)' +
-        '/n"<"  -  доабвит картинку слева' +
-        '/n">"  -  доабвит картинку справа' +
-        '/n300, 600 или другое число   -   ширина картинки на сайте');
+    jQuery('.btns_instruct').append('"+"  -  добавить картинку и остаться на странице попап (если нажать на кнопку без плюса, окно закоется)' +
+        '/n"<"  -  добавит картинку слева' +
+        '/n">"  -  добавит картинку справа' +
+        '/n300, 600 или другое число - ширина картинки на сайте');
 
     jQuery('.agi_param').append(
         '<select class="agi_select_size">'
@@ -80,8 +80,7 @@ function addHtml() {
             +'<option value="yellow">Желтые</option>'
         +'</select>'
 
-        +'<label>Только квадратные    </label>'
-        +'<input type="checkbox" id="circle_only" name="circle_only"/>'
+        +'<label for="circle_only"><input type="checkbox" id="circle_only" name="circle_only"/> Только квадратные</label>'
     );
 }
 
@@ -179,7 +178,7 @@ jQuery(document).ready(function() {
         });
         jQuery('.next_p').click(function () {
             googleImagesPage++;
-            if (googleImagesPage == 1) jQuery('.prev_p').html('←prev');
+            if (googleImagesPage == 1) jQuery('.prev_p').html('←пред');
             jQuery('.numpage').text(googleImagesPage + 1);
             agi_googleImagesSearch();
         });
@@ -242,6 +241,7 @@ jQuery(document).ready(function() {
             //вывести окно
             jQuery('.agi_popup').toggle();
             jQuery('.agi_window').toggle();
+            //jQuery('.agi_results').html('');
 
             alt = getNearestTitle(carPos);
 
@@ -282,6 +282,7 @@ jQuery(document).ready(function() {
 //поиск и вывод превью картинок
 function agi_googleImagesSearch() {
     $doc = document.getElementsByClassName('agi_window')[0].firstChild;
+    console.log($doc);
 
     var $ = jQuery;
 
@@ -340,8 +341,7 @@ function agi_googleImagesSearch() {
             var circle;
             if(orientation === 'square') {
                 circle = '<div class="circle_img"><form>'
-                    + '<label>Cirlce</label>'
-                    +'<input type="checkbox" id="circle_img" name="circle_img"/>'
+                    + '<label for="circle_img' + i + '"><input type="checkbox" id="circle_img' + i + '" name="circle_img' + i + '"/> Cirlce</label>'
                     +'</form></div>';
             }
             else circle = '';
@@ -350,11 +350,11 @@ function agi_googleImagesSearch() {
                 +orientation+'" proportion="'+propor+'"><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
                 + '" url="' + items[i]['imgurl']
                 + '" href="' + srcFull
-                + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><span>' + items[i].w+'x'+items[i].h
-                + '</span>'
+                + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><div class="agi_img_propor">' + items[i].w+'x'+items[i].h
+                + '</div>'
                 +  circle;
 
-            var html_img = '<div><span class="agi_img_add l_300_close" data-toggle="tooltip" title="Добавить слева (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">←'
+            var html_img = '<div id="founded_images_btns"><span class="agi_img_add l_300_close" data-toggle="tooltip" title="Добавить слева (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">←'
                     +agi_width+'</span>'
                 + '<span class="agi_img_add r_300_close" data-toggle="tooltip" title="Добавить справа (w:число) и закрыть" data-delay="{'+'"show": 100, "hide": 1000}">'
                     +agi_width+'→</span>'
@@ -368,7 +368,7 @@ function agi_googleImagesSearch() {
                     +agi_width_big+'</span>'
                 +'</div></div>';
 
-            var html_thmb = '<div class="create_thmb_btn">Make the thumbnail</div></div>';
+            var html_thmb = '<div id="founded_images_btns"><span class="create_thmb_btn">Сделать миниматюрой</span></div></div>';
 
             if(jQuery('.agi_window').attr('win') == 'img'
                 && Number(items[i].w) > Number(agi_width)) jQuery('.agi_results').append(html + html_img);
@@ -390,7 +390,7 @@ function agi_googleImagesSearch() {
 
         jQuery('.create_thmb_btn').click(function () { //добавляем миниатюру
             var rem = jQuery(this).parent();
-            //rem = rem.parent();
+            rem = rem.parent();
             rem.find('img').after('<div class="load_img">Загружаю...</div>').remove();
             agi_googleThumbnailUpload(rem.find('.agi_img_res'),rem.attr('orient'));
             setTimeout(function(){
@@ -459,6 +459,7 @@ function agi_googleImagesSearch() {
 }
 
 function agi_googleImagesUpload(item, side, width, orientation, altI, proportion) {
+    console.log(item);
     var $ = jQuery;
     /*if(altI) var curAlt = altI;
     else var curAlt = alt;*/
@@ -481,41 +482,13 @@ function agi_googleImagesUpload(item, side, width, orientation, altI, proportion
             var pathname = jQuery(location).attr('host');
             //alert('Добавлено! ' + response);
             item.find('.load_img').text('Добавлено');
-            if(item.parent().find('#circle_img').prop("checked")) circle = ' img_rounded';
+            if(item.parent().find('.circle_img input').prop("checked")) circle = ' img_rounded';
             var img = '<img src="' + '//' + pathname + response + '" class="' + side
                 + circle  + '"' +' alt="' + curAlt + '"/>';
             InsertByCaretPos(carPos, img);
             carPos = carPos + img.length;
         }
     });
-
-    /*var pathname = jQuery(location).attr('host');
-    jQuery.ajax({
-        url:    '//' + pathname + '/wp-content/plugins/f-seo-auto-google-images/upload.php', //Адрес подгружаемой страницы
-        type:     "POST", //Тип запроса
-        //dataType: "html", //Тип данных
-        data: data2,
-        success: function(response) { //Если все нормально
-            console.log(response);
-            if(response === 'WP_Error') alert('Картинка недоступна');
-            else {
-                var circle = '';
-                var pathname = jQuery(location).attr('host');
-                //alert('Добавлено! ' + response);
-                item.find('.load_img').text('Добавлено');
-                if(item.parent().find('#circle_img').prop("checked")) circle = ' img_rounded';
-                var img = '<img src="' + '//' + pathname + response + '" class="' + side
-                    + circle  + '"' +' alt="' + curAlt + '"/>';
-                InsertByCaretPos(carPos, img);
-                carPos = carPos + img.length;
-            }
-        },
-        error: function(response) { //Если ошибка
-            alert("Ошибка  " + response.status);
-            console.log(response);
-        }
-    });*/
-
 }
 
 function agi_googleThumbnailUpload(item, orientation) {
@@ -533,7 +506,7 @@ function agi_googleThumbnailUpload(item, orientation) {
     $.post(ajaxurl, data_thmb, function(response){
         if(response === 'WP_Error') alert('Картинка недоступна');
         else {
-            console.log(response)
+            //console.log(response)
             var pathname = jQuery(location).attr('host');
             item.find('.load_img').text('Добавлено');
             jQuery('#_thumbnail_id').val(response[0]);
@@ -599,19 +572,4 @@ function setOptionWidth(){
         agi_width = response[0];
         agi_width_thmb = response[2];
     },"json");
-}
-
-function onMouse() {
-    var on;
-    var delay = 2000;
-    jQuery('.agi_img_add').mouseover(function () {
-        on = true;
-        setTimeout(function () {
-            if(on) jQuery('.btns_instruct').show();
-        },delay)
-    });
-    jQuery('.agi_img_add').mouseleave(function () {
-        on = false;
-        jQuery('.btns_instruct').hide();
-    });
 }

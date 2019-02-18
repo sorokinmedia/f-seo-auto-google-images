@@ -85,22 +85,28 @@ a.thmb_btn span,a.thmb_btn{
 #agi_search{
     display: block;
     margin-bottom: 20px;
+    width: 90%;
 }
 .srch_btn{
     display: inline-block;
     background: #ccc;
-    width: 60px;
-    height: 45px;
+    width: 26%;
+    margin-left: 2%;
+    height: 35px;
     text-align: center;
-    line-height: 48px;
-    font-weight: 700;
+    line-height: 36px;
+    font-weight: 500;
     cursor: pointer;
+    border-radius: 3px;
+    box-sizing: border-box;
 }
 .agi_srch_txt{
-    height: 45px;
+    display: inline;
+    height: 35px;
     padding: 0 15px;
-    font-size: 16px;
     width: 71%;
+    border-radius: 3px;
+    box-sizing: border-box;
 }
 .agi_srch_txt::-webkit-input-placeholder{
     font-style: italic;
@@ -108,15 +114,20 @@ a.thmb_btn span,a.thmb_btn{
 .agi_srch_txt:-moz-placeholder{
     font-style: italic;
 }
+#founded_images_btns{
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    clear: both;
+}
 .founded_img:hover{
     border: 3px solid #cccccc;
 }
 .founded_img{
     display: inline-block;
-    margin-right: 20px;
-    margin-bottom: 20px;
+    margin: 0 10px 20px;
     width: 160px;
-    height: 215px;
+    height: 250px;
     box-sizing: border-box;
     overflow: hidden;
     border: 3px solid transparent;
@@ -125,13 +136,14 @@ a.thmb_btn span,a.thmb_btn{
 .founded_img a{
     box-sizing: border-box;
     overflow: hidden;
-    width: 120px;
-    height: 120px;
+    width: 160px;
+    height: 160px;
     display: block;
 }
 .founded_img a img{
-    max-width: 120px;
-    max-height: 120px;
+    width: 100%;
+    height: auto;
+    display:block;
 }
 .agi_results{
     box-sizing: border-box;
@@ -142,6 +154,7 @@ a.thmb_btn span,a.thmb_btn{
     height: 93%;
     overflow-y: scroll;
     position: relative;
+    text-align: center;
 }
 .popap_cross{
     position: fixed;
@@ -156,12 +169,10 @@ a.thmb_btn span,a.thmb_btn{
     clear: both;
     display: block;
     width: 90%;
-    border-right: 1px solid #ccc;
 }
 .agi_param select{
     display: block;
-    width: 97%;
-    border: none;
+    width: 100%;
     margin-bottom: 10px;
 }
 .afi_win_left{
@@ -170,50 +181,44 @@ a.thmb_btn span,a.thmb_btn{
     width: 30%;
     float: left;
 }
-.agi_img_add,.agi_add_all_marked{
-    margin-top: 5px;
+.agi_img_add, .agi_add_all_marked{
+    margin: 5px 3px 0;
     display: block;
+    float:left;
     background: #00a0d2;
     color: #fff;
-    float: left;
     font-size: 13px;
     line-height: 26px;
     height: 28px;
     text-align: center;
-    margin-right: 5px;
     width: 45px;
     cursor: pointer;
-    border: 1px solid #0073aa;
     -webkit-appearance: none;
-    -webkit-border-radius: 3px;
     border-radius: 3px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 .agi_img_add:nth-child(3n+1){
     clear: both;
 }
+.create_thmb_btn{
+    margin: 5px 3px 0;
+    display: block;
+    background: #5bbf60;
+    color: #fff;
+    font-size: 12px;
+    line-height: 26px;
+    height: 28px;
+    text-align: center;
+    padding: 0 2px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
 
 .yellow_btn{
     background: #5bbf60;
     border-color: #5bbf60;
-}
-.create_thmb_btn{
-    background: #5bbf60;
-    padding: 3px;
-    text-align: center;
-    color: #fff;
-    border-radius: 2px;
-    cursor: pointer;
-}
-.numpage{
-    color: #0073aa;
-    font-size: 18px;
-    float: left;
-    display: inline-block;
-    width: 15%;
-    margin-top: 20px;
 }
 .agi_add_all_marked{
     float: none;
@@ -250,17 +255,27 @@ a.thmb_btn span,a.thmb_btn{
 .agi_img_res{
     text-decoration: none;
 }
+.agi_pagination{
+    clear: both;
+    overflow: hidden;
+    width: 70%;
+    float: right;
+    text-align: center;
+}
 .agi_pages{
-    color: #0073aa;
+    color: #00a0d2;
     cursor: pointer;
     display: inline-block;
-    width: 20%;
+    width: 25%;
     font-size: 25px;
-    float: left;
     margin-top: 20px;
 }
-.prev_p{
-    margin-left: 39%;
+.numpage{
+    color: #0073aa;
+    font-size: 25px;
+    display: inline-block;
+    width: 25%;
+    margin-top: 20px;
 }
 .btns_instruct{
     display: none;
@@ -285,8 +300,12 @@ label.d_block{
 }
 .circle_img{
     float: right;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 .circle_img label{
-    margin-right: 10px;
+    display: block;
+}
+.agi_img_propor{
+    float:left;
+    margin-left: 3px;
 }
