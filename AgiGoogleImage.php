@@ -78,10 +78,8 @@ class AgiGoogleImage{
         echo file_get_contents($this->filename);
     }
 
-    public function compress($ratio)
+    public function compress($ratio = 80)
     {
-        $ratio = (int) $ratio;
-        if (!$ratio) $ratio = 80;
         imagejpeg($this->_gd_handle, $this->filename, $ratio);
     }
 
