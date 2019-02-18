@@ -1,8 +1,7 @@
 === F-seo Auto Google Images ===
-Contributors: Valeriy Rysin
+Contributors: Valeriy Rysin, Ruslan Giliazetdinov
 Tags: google, images, autoload
-Donate link: http://qandaforum.trevorpythag.co.uk
-Requires at least: 3.0
-Tested up to: 4.0
+Requires at least: 5.0
+Tested up to: 5.0.3
 
-Плагин автоподгрузки картинок из Google Images, FAQ
+Плагин автоподгрузки картинок из Google Images
