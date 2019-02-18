@@ -35,6 +35,7 @@ add_action('admin_menu', 'fseo_agi_setup_menu');
 function register_agi_settings()
 {
     register_setting( 'agi_settings-group', 'agi_img_churl' );
+    register_setting( 'agi_settings-group', 'agi_replace_main');
 }
 
 /**
@@ -48,13 +49,24 @@ function sb_admin_fseo_agi_sett()
     {
         update_option('agi_img_churl', $_POST['agi_img_churl']);
     }
-    settings_fields( 'fseo-csv-settings-group' );
+    if ($_SERVER['REQUEST_METHOD'] === 'POST'
+        && $_POST['agi_replace_main'] !== get_option('agi_replace_main'))
+    {
+        update_option('agi_replace_main', $_POST['agi_replace_main']);
+    }
+    settings_fields( 'agi_settings-group' );
     ?>
     <form method="post">
         <fieldset>
             <label class="clear d_block" for="agi_img_churl">
                 <input name="agi_img_churl" type="checkbox" id="agi_img_churl" <?= get_option('agi_img_churl') ? 'checked="checked"' : ''; ?> />
                 Убрать "плохие картинки" из выдачи (замедлит поиск в 3 раза)
+            </label>
+        </fieldset>
+        <fieldset>
+            <label class="clear d_block" for="agi_replace_main">
+                <input name="agi_replace_main" type="checkbox" id="agi_replace_main" <?= get_option('agi_replace_main') ? 'checked="checked"' : ''; ?> />
+                Заменять основной файл сжатым (Максимальный размер файла задается в <a href="/wp-admin/options-media.php">настройках медиафайлов, крупный размер</a>)
             </label>
         </fieldset>
         <input type="submit" class="button-primary" value="Сохранить" />
@@ -465,4 +477,6 @@ function replace_uploaded_image($image_data) {
     $image_data['height'] = $image_data['sizes']['large']['height'];
     return $image_data;
 }
-add_filter('wp_generate_attachment_metadata','replace_uploaded_image');
+if (get_option('agi_replace_main')) {
+    add_filter('wp_generate_attachment_metadata', 'replace_uploaded_image');
+}
