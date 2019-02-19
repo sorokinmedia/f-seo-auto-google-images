@@ -368,7 +368,7 @@ function agi_googleImagesSearch() {
                     +agi_width_big+'</span>'
                 +'</div></div>';
 
-            var html_thmb = '<div id="founded_images_btns"><span class="create_thmb_btn">Сделать миниматюрой</span></div></div>';
+            var html_thmb = '<div id="founded_images_btns"><span class="create_thmb_btn">Сделать миниатюрой</span></div></div>';
 
             if(jQuery('.agi_window').attr('win') == 'img'
                 && Number(items[i].w) > Number(agi_width)) jQuery('.agi_results').append(html + html_img);
