@@ -52,22 +52,28 @@ class AgiGoogleImage
         $this->filename = sys_get_temp_dir() . '/' . time() . mt_rand(0, 99999);
         file_put_contents($this->filename, $response['body']);
         $this->files = $response['body'];
-        switch ($mime)
-        {
-            case 'image/jpeg':
-                $this->_gd_handle = $response['body'];
-                break;
-            case 'image/pjpeg':
-                $this->_gd_handle = imagecreatefromjpeg($this->files);
-                break;
-            case 'image/png':
-                $this->_gd_handle = imagecreatefrompng($this->files);
-                break;
-            case 'image/gif':
-                $this->_gd_handle = imagecreatefromgif($this->files);
-                break;
-            default:
-                throw new Exception('AgiGoogleImage::__construct() - unsupported mime type: ' . $mime);
+        if (is_string($response['body'])) {
+            $this->_gd_handle = imagecreatefromstring($response['body']);
+        } else {
+             // Скорее всего, сюда мы никогда не попадем, т.к. $response['body'] - это строка
+            switch ($mime)
+            {
+                case 'image/jpeg':
+                    // Но если все-таки попадем, то эта ветка предполагает тип "ссылка на ресурс" (resource)
+                    $this->_gd_handle = $response['body'];
+                    break;
+                case 'image/pjpeg':
+                    $this->_gd_handle = imagecreatefromjpeg($this->files); // А эта ветка - что $this->files ($response['body']) - это имя файла изображения
+                    break;
+                case 'image/png':
+                    $this->_gd_handle = imagecreatefrompng($this->files);
+                    break;
+                case 'image/gif':
+                    $this->_gd_handle = imagecreatefromgif($this->files);
+                    break;
+                default:
+                    throw new Exception('AgiGoogleImage::__construct() - unsupported mime type: ' . $mime);
+            }
         }
         $this->width = imagesx($this->_gd_handle);
         $this->height = imagesy($this->_gd_handle);
