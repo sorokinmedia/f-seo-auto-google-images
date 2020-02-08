@@ -304,8 +304,20 @@ function agi_googleImagesSearch() {
 
     };
 
-    searchXhr = $.post(ajaxurl, data, function(items){
-
+    searchXhr = $.post(ajaxurl, data, function(resp){
+        // var items = resp[0];
+        var chunk = resp[1];
+        var res;
+        var code = 'var AF_initDataCallback = function(val) { res = val.data };' + chunk;
+        eval(code);
+        var items = res()[31][0][12][2];
+        items = items.map($img => ({
+            w: $img[1][3][2],
+            h: $img[1][3][3],
+            imgurl: $img[1][3][0],
+            thumbnail: $img[1][3][0],
+            imgrefurl: 4,
+        }));
         console.log(items)
         if (items.length == 0)
         {

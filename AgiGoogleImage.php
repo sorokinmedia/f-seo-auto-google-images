@@ -6,7 +6,7 @@
  * Date: 18.09.2016
  * Time: 16:04
  */
-class AgiGoogleImage{
+class AgiGoogleImage {
     public $mime = false; 
     public $filename;
     public $width;
@@ -62,8 +62,14 @@ class AgiGoogleImage{
                 throw new \Exception("AgiGoogleImage::__construct() - unsupported mime type: " + $mime);
         }
 
-        $this->width = imagesx($this->_gd_handle);
-        $this->height = imagesy($this->_gd_handle);
+        try {
+            $this->width = imagesx($this->_gd_handle);
+            $this->height = imagesy($this->_gd_handle);
+        }
+        catch (Exception $err) {
+            throw new \Exception("AgiGoogleImage::__construct() - imagesx fail");
+        }
+
     }
 
     public function __destruct()

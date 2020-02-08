@@ -185,6 +185,12 @@ function agi_google_images_search()
     );
     $items = array();
 
+    $pos = strpos( $response['body'], "AF_initDataCallback({key: 'ds:2");
+    $part1 = substr($response['body'], 0, $pos);
+    $part2 = substr($response['body'], $pos);
+    $posEnd = strpos($part2, '</script');
+    $resStr = substr($part2, 0, $posEnd);
+
     /*echo json_encode($matches);
         die();*/
 
@@ -215,7 +221,7 @@ function agi_google_images_search()
         $items[] = $item;
     }
 
-    echo json_encode($items);
+    echo json_encode([$items, $resStr]);
     die();
 }
 add_action('wp_ajax_agi_google_images_search', 'agi_google_images_search' );
@@ -232,7 +238,7 @@ function agi_google_images_upload()
     $thumb = $_POST['thumb'];
     $orientation = $_POST['orientation'];
     $propotion = $_POST['proportion'];
-    
+
     try
     {
         $image = new AgiGoogleImage($url, $referer);
@@ -242,6 +248,7 @@ function agi_google_images_upload()
         header("HTTP/1.0 404 Not Found");
         die();
     }
+
     if ($image->mime=='image/png')
     {
         $filename = _getFileNameAgi($search).date("_dHis").".png";
