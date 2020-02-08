@@ -196,8 +196,17 @@ function agi_google_images_search()
         "/<div .* class=\"rg_meta.*\".*>(.*)<\/div>/U",
         $response['body'], $matches
     );
-    // собираем массив картинок
-    $items = [];
+    $items = array();
+
+    $pos = strpos( $response['body'], "AF_initDataCallback({key: 'ds:2");
+    $part1 = substr($response['body'], 0, $pos);
+    $part2 = substr($response['body'], $pos);
+    $posEnd = strpos($part2, '</script');
+    $resStr = substr($part2, 0, $posEnd);
+
+    /*echo json_encode($matches);
+        die();*/
+
     foreach ($matches[1] as $number => $match)
     {
         $item = array();
@@ -210,7 +219,8 @@ function agi_google_images_search()
         $item['imgrefurl'] = $data->isu;
         $items[] = $item;
     }
-    echo json_encode($items);
+
+    echo json_encode($resStr);
     die();
 }
 add_action('wp_ajax_agi_google_images_search', 'agi_google_images_search' );
@@ -229,8 +239,9 @@ function agi_google_images_upload()
     $thumb = $_POST['thumb'];
     $orientation = $_POST['orientation'];
     $propotion = $_POST['proportion'];
-    // если есть ошибки по урлу убиваем, если ошибок нет, создаем объект изображения - дальше работаем с ним
-    try {
+
+    try
+    {
         $image = new AgiGoogleImage($url, $referer);
     } catch(Exception $e) {
         header('HTTP/1.0 404 Not Found');
