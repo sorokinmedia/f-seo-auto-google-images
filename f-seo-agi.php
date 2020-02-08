@@ -221,7 +221,7 @@ function agi_google_images_search()
         $items[] = $item;
     }
 
-    echo json_encode([$items, $resStr]);
+    echo json_encode($resStr);
     die();
 }
 add_action('wp_ajax_agi_google_images_search', 'agi_google_images_search' );

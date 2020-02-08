@@ -304,13 +304,11 @@ function agi_googleImagesSearch() {
 
     };
 
-    searchXhr = $.post(ajaxurl, data, function(resp){
-        // var items = resp[0];
-        var chunk = resp[1];
-        var res;
-        var code = 'var AF_initDataCallback = function(val) { res = val.data };' + chunk;
+    searchXhr = $.post(ajaxurl, data, function(chunk){
+        var dataFunc;
+        var code = 'var AF_initDataCallback = function(val) { dataFunc = val.data };' + chunk;
         eval(code);
-        var items = res()[31][0][12][2];
+        var items = dataFunc()[31][0][12][2];
         items = items.map($img => ({
             w: $img[1][3][2],
             h: $img[1][3][3],
