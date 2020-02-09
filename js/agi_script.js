@@ -310,15 +310,15 @@ function agi_googleImagesSearch() {
         var code = 'var AF_initDataCallback = function(val) { dataFunc = val.data };' + chunk;
         eval(code);
         var items = dataFunc()[31][0][12][2];
-	    console.log(items)
+	    console.log(q, items)
         items = items.map(img => {
         	if (!img || !img[1] || !img[1][3]) return {};
         	return {
-		        w: img[1][3][1],
-		        h: img[1][3][2],
+		        w: img[1][3][2],
+		        h: img[1][3][1],
 		        imgurl: img[1][3][0],
 		        thumbnail: img[1][3][0],
-		        imgrefurl: 4,
+		        imgrefurl: img[1][9][2003][2],
 	        }
         });
 
@@ -361,7 +361,7 @@ function agi_googleImagesSearch() {
             else circle = '';
 
             var html = '<div class="founded_img" mark="" orient="'
-                +orientation+'" proportion="'+propor+'"><a class="agi_img_res" q="'+q+'" referer="' + items[i].imgrefurl
+                +orientation+'" proportion="'+propor+'"><a class="agi_img_res" q="' + q + '" referer="' + items[i].imgrefurl
                 + '" url="' + items[i]['imgurl']
                 + '" href="' + srcFull
                 + '" onclick="return false"><img src="'+items[i].thumbnail+'" /></a><div class="agi_img_propor">' + items[i].w+'x'+items[i].h
@@ -473,7 +473,6 @@ function agi_googleImagesSearch() {
 }
 
 function agi_googleImagesUpload(item, side, width, orientation, altI, proportion) {
-    console.log(item);
     var $ = jQuery;
     /*if(altI) var curAlt = altI;
     else var curAlt = alt;*/
@@ -488,6 +487,7 @@ function agi_googleImagesUpload(item, side, width, orientation, altI, proportion
         'orientation':orientation,
         'proportion': proportion
     };
+	console.log(data2);
     $.post(ajaxurl, data2, function(response){
         console.log(response);
         if(response === 'WP_Error') alert('Картинка недоступна');
