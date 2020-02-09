@@ -311,13 +311,16 @@ function agi_googleImagesSearch() {
         eval(code);
         var items = dataFunc()[31][0][12][2];
 	    console.log(items)
-        items = items.map($img => ({
-            w: $img[1][3][1],
-            h: $img[1][3][2],
-            imgurl: $img[1][3][0],
-            thumbnail: $img[1][3][0],
-            imgrefurl: 4,
-        }));
+        items = items.map(img => {
+        	if (!img || !img[1] || !img[1][3]) return {};
+        	return {
+		        w: img[1][3][1],
+		        h: img[1][3][2],
+		        imgurl: img[1][3][0],
+		        thumbnail: img[1][3][0],
+		        imgrefurl: 4,
+	        }
+        });
 
         if (items.length == 0)
         {
