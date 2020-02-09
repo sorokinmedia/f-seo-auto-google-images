@@ -310,6 +310,7 @@ function agi_googleImagesSearch() {
         var code = 'var AF_initDataCallback = function(val) { dataFunc = val.data };' + chunk;
         eval(code);
         var items = dataFunc()[31][0][12][2];
+	    console.log(items)
         items = items.map($img => ({
             w: $img[1][3][1],
             h: $img[1][3][2],
@@ -317,7 +318,7 @@ function agi_googleImagesSearch() {
             thumbnail: $img[1][3][0],
             imgrefurl: 4,
         }));
-        console.log(items)
+
         if (items.length == 0)
         {
             alert( 'Не нашел');
@@ -329,7 +330,7 @@ function agi_googleImagesSearch() {
         jQuery('.agi_results').html('');
 
         for(var i = 0; i < items.length; i++){
-            
+
             var srcFull = ajaxurl + "?action=google_images_get&full=true&url=" + items[i].imgurl + "&referer=" + items[i].imgrefurl;
 
             if(items[i].churl == 'b9ka') continue;
@@ -387,12 +388,12 @@ function agi_googleImagesSearch() {
         }
 
         jQuery('.agi_img_res').click(function () {
-            
+
             var img = jQuery(this).attr('url');
             jQuery('.agi_preview').toggle();
             jQuery('.agi_preview').append('<img src="' + img + '" />');
         });
-        
+
         jQuery('.agi_preview').click(function () {
 
             jQuery('.agi_preview').html('').hide();
@@ -486,7 +487,7 @@ function agi_googleImagesUpload(item, side, width, orientation, altI, proportion
     };
     $.post(ajaxurl, data2, function(response){
         console.log(response);
-        if(response === 'WP_Error') alert('Картинка недоступна');    
+        if(response === 'WP_Error') alert('Картинка недоступна');
         else {
             var circle = '';
             var pathname = jQuery(location).attr('host');
@@ -560,7 +561,7 @@ function getNearestTitle(pos) {
         i3 = res3.index;
     }
     if( i3 >= 0){
-        if(i3 > i) i = i3;  
+        if(i3 > i) i = i3;
     }
 
     i = i + 4;
