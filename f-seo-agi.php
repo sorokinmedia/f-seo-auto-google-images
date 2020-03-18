@@ -178,7 +178,6 @@ function agi_google_images_upload()
     }
     // формируем название файла
     $filename = _getFileNameAgi($search) . date('_dHis') . '.jpg';
-
     if ($image->mime === 'image/png') {
         $filename = _getFileNameAgi($search) . date('_dHis') . '.png';
     }
@@ -231,16 +230,16 @@ function agi_google_images_upload()
                 $propotion
             )[0];
     }
-    if ($width) {
-        $file_dir = $upload_dir['path'] . '/'
-            . getFileNameWithSize(
-                $short_name . '-' . get_option($width . '_size_w'),
-                $upload_dir['path'],
-                $orientation,
-                get_option($width . '_size_w'),
-                $propotion
-            )[0];
-    }
+//    if ($width) {
+//        $file_dir = $upload_dir['path'] . '/'
+//            . getFileNameWithSize(
+//                $short_name . '-' . get_option($width . '_size_w'),
+//                $upload_dir['path'],
+//                $orientation,
+//                get_option($width . '_size_w'),
+//                $propotion
+//            )[0];
+//    }
 
     $pos = strpos($file_dir, '/wp-content');
     $file_dir = substr($file_dir, $pos);
