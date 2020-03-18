@@ -301,8 +301,9 @@ function getFileNameWithSize($find_file_name, $path, $orientation, $width, $prop
         $s = strpos($name, $find_file_name);
 
         // если имя картинки совпало с искомым
-        if ($s || $s === 0) {
+//        if ($s || $s === 0) {
             $cut_height = str_replace($find_file_name . 'x', '', $name);
+
             if (
                 ($orientation === 'horizontal' && (int)$width > (int)$cut_height)
                 || ($orientation === 'vertical' && (int)$width < (int)$cut_height)
@@ -312,7 +313,7 @@ function getFileNameWithSize($find_file_name, $path, $orientation, $width, $prop
             } else {
                 continue;
             }
-        }
+//        }
         if ($i > 20) {
             break;
         }
