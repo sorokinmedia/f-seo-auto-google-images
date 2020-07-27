@@ -302,14 +302,16 @@ function getFileNameWithSize($find_file_name, $path, $orientation, $width, $prop
 
         // если имя картинки совпало с искомым
 //        if ($s || $s === 0) {
-            $cut_height = str_replace($find_file_name . 'x', '', $name);
+            $cutHeight = (int)str_replace($find_file_name . 'x', '', $name);
 
             if (
-                ($orientation === 'horizontal' && (int)$width > (int)$cut_height)
-                || ($orientation === 'vertical' && (int)$width < (int)$cut_height)
-                || ($orientation === 'square' && (int)$width === (int)$cut_height)
+                $cutHeight && (
+                    ($orientation === 'horizontal' && (int)$width > $cutHeight)
+                    || ($orientation === 'vertical' && (int)$width < $cutHeight)
+                    || ($orientation === 'square' && (int)$width === $cutHeight)
+                )
             ) {
-                $ar[] = [$name, (int)$width / (int)$cut_height];
+                $ar[] = [$name, (int)$width / $cutHeight];
             } else {
                 continue;
             }
